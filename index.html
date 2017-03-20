@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<style>
+    body{
+      background-color: black;
+    }
+    img{
+      image-rendering: optimizeSpeed;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-crisp-edges;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: optimize-contrast;
+      image-rendering: pixelated;
+      -ms-interpolation-mode: nearest-neighbor;
+    }
+
+    .container{
+      height: 500px;
+      width: 500px;
+      background-color: lightgrey;
+      margin: auto;
+      font-size: 0px;
+      filter: brightness(0.5);
+    }
+    .textbox{
+      height: 100px;
+      width: 500px;
+      background-color: black;
+      color: rgb(80, 80, 80);
+      font-family: cursive, sans-serif, strong;
+      font-size: 30px;
+      margin: auto;
+      margin-top: 10px;
+      display: block;
+    }
+    .inventory{
+      height: 500px;
+      width: 250px;
+      float: right;
+      position: relative;
+      margin-top: -610px;
+    }
+    .itemoutline{
+      height: 110px;
+      width: 110px;
+      margin: 5px;
+      float: left;
+    }
+    .itemoutline:hover{
+      background-color: rgb(80, 80, 80);
+    }
+    .itemcontainer{
+      height: 100px;
+      width: 100px;
+      display: inline-block;
+      margin: 5px;
+      background-color: black;
+    }
+    .inventorydescription{
+      height: 500px;
+      width: 250px;
+      float: left;
+      position: relative;
+      margin-top: -610px;
+      text-align: center;
+    }
+    .inventorydescription h1{
+      color: rgb(80, 80, 80);
+      font-family: cursive, sans-serif, strong;
+      font-size: 30px;
+    }
+    .inventorydescription h2{
+      color: rgb(100, 100, 100);
+      font-family: cursive, sans-serif, strong;
+      font-size: 30px;
+    }
+    .inventorydescription p{
+      color: rgb(60, 60, 60);
+      font-family: cursive, sans-serif;
+      font-size: 20px;
+    }
+
+    .clickable:hover{
+      cursor: pointer;
+    }
+
+    .moveright{
+      height: 500px;
+      width: 40px;
+      position: relative;
+      margin-left: auto;
+      margin-top: -100%;
+      float: right;
+    }
+    .moveleft{
+      height: 500px;
+      width: 40px;
+      position: relative;
+      margin-top: -100%;
+      margin-right: auto;
+      float: left;
+    }
+    .moveup{
+      height: 40px;
+      width: 500px;
+      position: relative;
+      margin-top: -100%;
+      margin-bottom: auto;
+      float: top;
+    }
+    .movedown{
+      height: 40px;
+      width: 500px;
+      position: relative;
+      margin-top: 84%;
+    }
+  </style>
+	<meta charset="UTF-8">
+</head>
+
+<body id="body">
+  <!--Note for Placing Objects: There is a 4 pixel margin between images by default.-->
+  <div class="container" id="container">
+    <img id="background" src="Graphics/Backgrounds/Bedroom.png" style="height:500px; width:500px">
+    <div id="moveright" class="moveright" onclick="enterBedDoor()" style="cursor:e-resize">
+    </div>
+    <div id="moveleft" class="moveleft">
+    </div>
+    <div id="moveup" class="moveup">
+    </div>
+    <div id="movedown" class="movedown">
+    </div>
+    <img id="object1" src="Graphics/Objects/Bedroom/Calendar.png" class="clickable" style="height:120px; width:120px; position:relative; top:-420px; left:270px" onclick="calendar1()">
+    <img id="object2" src="Graphics/Objects/Bedroom/Lamp.png" class="clickable" style="height:80px; width:65px; position:relative; top:-230px; left:-90px" onclick="lamp1()">
+    <img id="object3" class="clickable">
+    <img id="object4" class="clickable">
+    <img id="object5" class="clickable">
+  </div>
+
+  <div class="textbox" id="textbox">
+  </div>
+
+  <div class="inventory" id="inventory">
+    <div class="itemoutline" id="itemoutline1">
+      <div class="itemcontainer" id="itemcontainer1">
+      </div>
+    </div>
+    <div class="itemoutline" id="itemoutline2">
+      <div class="itemcontainer" id="itemcontainer2">
+      </div>
+    </div>
+    <div class="itemoutline" id="itemoutline3">
+      <div class="itemcontainer" id="itemcontainer3">
+      </div>
+    </div>
+    <div class="itemoutline" id="itemoutline4">
+      <div class="itemcontainer" id="itemcontainer4">
+      </div>
+    </div>
+    <div class="itemoutline" id="itemoutline5">
+      <div class="itemcontainer" id="itemcontainer5">
+      </div>
+    </div>
+    <div class="itemoutline" id="itemoutline6">
+      <div class="itemcontainer" id="itemcontainer6">
+      </div>
+    </div>
+    <div class="itemoutline" id="itemoutline7">
+      <div class="itemcontainer" id="itemcontainer7">
+      </div>
+    </div>
+    <div class="itemoutline" id="itemoutline8">
+      <div class="itemcontainer" id="itemcontainer8">
+      </div>
+    </div>
+  </div>
+  <div class="inventorydescription" id="inventorydescription">
+  </div>
+
+  <audio autoplay loop>
+    <source src="Sounds/Ambience.wav" type="audio/wav">
+  </audio>
+
+  <p id="itemcontainer9">
+  </p>
+
+  <script>
+    //TEXT CONTROLS
+    var inspectEnabled = false;
+
+    setTimeout(introBedroom, 3000);
+
+    //BRIGHTNESS CONTROLS
+    var containerCSS = document.querySelector(".container");
+    var brightnessSetting = 0.4;
+    var brightnessSpeed = 200;
+
+    loopBrighter();
+
+    //ITEM CONTROLS
+    var totalItem = 0;
+
+    var closetKeyTaken = false;
+    var sinkKeyTaken = false;
+    var sleepingPillsTaken = false;
+    var sinkNoteTaken = false;
+    var pipeTaken = false;
+
+    var closetDoorOpen = false;
+    var bathroomDoorUnlocked = false;
+    var sinkCabinetOpen = false;
+    var sinkCabinetUnlocked = false;
+    var crackOpened = false;
+
+    var key1Slot;
+    var key2Slot;
+    var key3Slot;
+
+    var key1Held = false;
+    var key2Held = false;
+    var key3Held = false;
+    var hammerHeld = false;
+
+    var sleep = 0;
+
+    //AUDIO CONTROLS
+    var audioDoor = new Audio("Sounds/Door.wav");
+    var audioItem = new Audio("Sounds/Item Pickup.wav");
+    var audioSmash = new Audio("Sounds/Smash.wav");
+
+    //TEXT FUNCTIONS
+    function clearText(){
+      document.getElementById("textbox").innerHTML = "";
+      inspectEnabled = true;
+    }
+
+    //Intro Text Functions
+    function introBedroom(){
+      inspectEnabled = false;
+      document.getElementById("textbox").innerHTML = "I can't sleep.";
+      setTimeout(clearText, 5000);
+    }
+
+    //Inspect Text Functions
+    //CALENDAR
+    function calendar1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "It's the 24th of December.";
+        setTimeout(calendar2, 3000);
+      }
+    }
+    function calendar2(){
+      document.getElementById("textbox").innerHTML = "It's Christmas tomorrow.";
+      setTimeout(calendar3, 3000);
+    }
+    function calendar3(){
+      document.getElementById("textbox").innerHTML = "I can't wait.";
+      setTimeout(clearText, 3000);
+    }
+
+    //LAMP
+    function lamp1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "It's my lamp.";
+        setTimeout(lamp2, 3000);
+      }
+    }
+    function lamp2(){
+      document.getElementById("textbox").innerHTML = "It won't turn on.";
+      setTimeout(clearText, 3000);
+    }
+
+    //CLOSET
+    function closet1(){
+      enterCloset();
+    }
+
+    //BEDROOM DOOR
+    function door1(){
+      audioDoor.play();
+      enterHall();
+    }
+
+    //POSTER
+    function poster1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "It's a Christmas poster.";
+        setTimeout(poster2, 3000);
+      }
+    }
+    function poster2(){
+      document.getElementById("textbox").innerHTML = "I love Christmas.";
+      setTimeout(poster3, 3000);
+    }
+    function poster3(){
+      document.getElementById("textbox").innerHTML = "But it'll always be second to Valentines.";
+      setTimeout(clearText, 3000);
+    }
+
+    //CLOSET KEY
+    function key1(){
+      if(inspectEnabled == true){
+        closetKeyTaken = true;
+        totalItem += 1;
+        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Bathroom Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey1()\" onmouseover=\"closetKeyDescription()\" onmouseout=\"clearDescription()\">";
+        key1Slot = (totalItem + 1) - 1;
+        audioItem.play();
+        enterCloset();
+      }
+    }
+
+    //CLOSET DOOR
+    function closetDoor1(){
+      closetDoorOpen = true;
+      audioDoor.play();
+      enterCloset();
+    }
+
+    function closetDoor2(){
+      closetDoorOpen = false;
+      audioDoor.play();
+      enterCloset();
+    }
+
+    //BEDROOM DOOR
+    function door2(){
+      audioDoor.play();
+      enterBedDoor();
+    }
+
+    //GUESTROOM DOOR
+    function door3(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "The guest room.";
+        setTimeout(door3Part2, 3000);
+      }
+    }
+    function door3Part2(){
+      document.getElementById("textbox").innerHTML = "We haven't used it for the longest time.";
+      setTimeout(door3Part3, 3000);
+    }
+    function door3Part3(){
+      document.getElementById("textbox").innerHTML = "The handle is stuck.";
+      setTimeout(clearText, 3000);
+    }
+
+    //BATHROOM DOOR
+    function door4(){
+      if(bathroomDoorUnlocked == true){
+        audioDoor.play();
+        enterBathroom();
+      }
+      else if(key1Held == true){
+        bathroomDoorUnlocked = true;
+        var itemCount = (key1Slot + 1) - 1;
+        var repetitions = (totalItem - key1Slot) + 1;
+        for(i = itemCount; i <= repetitions; i += 1){
+          document.getElementById("itemcontainer" + i).innerHTML = document.getElementById("itemcontainer" + (i + 1)).innerHTML;
+        }
+        totalItem -= 1;
+        audioDoor.play();
+        enterBathroom();
+      }
+      else{
+        if(inspectEnabled == true){
+          inspectEnabled = false;
+          document.getElementById("textbox").innerHTML = "The bathroom.";
+          setTimeout(door4Part2, 3000);
+        }
+      }
+    }
+    function door4Part2(){
+      document.getElementById("textbox").innerHTML = "It's locked.";
+      setTimeout(clearText, 3000);
+    }
+
+    //MASTER BEDROOM DOOR
+    function door5(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "The master bedroom.";
+        setTimeout(door5Part2, 3000);
+      }
+    }
+    function door5Part2(){
+      document.getElementById("textbox").innerHTML = "I'd rather not go in there.";
+      setTimeout(clearText, 3000);
+    }
+
+    //LIVING ROOM HALL
+    function doorway1(){
+      enterLivingRoom();
+    }
+
+    //SINK
+    function sink1(){
+      enterSink();
+    }
+
+    //BATH TUB
+    function bathTub1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "It's the bath tub.";
+        setTimeout(bathTub2, 3000);
+      }
+    }
+    function bathTub2(){
+      document.getElementById("textbox").innerHTML = "The pipes are rusted over.";
+      setTimeout(clearText, 3000);
+    }
+
+    //TOILET
+    function toilet1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "It's the toilet.";
+        setTimeout(toilet2, 3000);
+      }
+    }
+    function toilet2(){
+      document.getElementById("textbox").innerHTML = "Nothing useful there.";
+      setTimeout(clearText, 3000);
+    }
+
+    //CRACK
+    function crack1(){
+      enterCrack();
+    }
+    function crack2(){
+      if(hammerHeld == true){
+        crackOpened = true;
+        audioSmash.play();
+        enterCrack();
+      }
+      else{
+        if(inspectEnabled == true){
+          inspectEnabled = false;
+          document.getElementById("textbox").innerHTML = "It's a crack in the wall.";
+          setTimeout(crack2Part2, 3000);
+        }
+      }
+    }
+    function crack2Part2(){
+      document.getElementById("textbox").innerHTML = "It's damp between the gaps.";
+      setTimeout(clearText, 3000);
+    }
+
+    //MIRROR
+    function mirror1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "The bathroom mirror.";
+        setTimeout(mirror2, 3000);
+      }
+    }
+    function mirror2(){
+      document.getElementById("textbox").innerHTML = "It's too dark to see my reflection.";
+      setTimeout(clearText, 3000);
+    }
+
+    //SINK KEY
+    function key2(){
+      if(inspectEnabled == true){
+        sinkKeyTaken = true;
+        totalItem += 1;
+        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Garage Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey2()\" onmouseover=\"sinkKeyDescription()\" onmouseout=\"clearDescription()\">";
+        key2Slot = (totalItem + 1) - 1;
+        audioItem.play();
+        enterSink();
+      }
+    }
+
+    //CABINET
+    function cabinet1(){
+      if(sinkCabinetUnlocked == true){
+        sinkCabinetOpen = true;
+        audioDoor.play();
+        enterSink();
+      }
+      else if(key3Held == true){
+        sinkCabinetUnlocked = true;
+        sinkCabinetOpen = true;
+        var itemCount = (key3Slot + 1) - 1;
+        var repetitions = (totalItem - key3Slot) + 1;
+        for(i = itemCount; i <= repetitions; i += 1){
+          document.getElementById("itemcontainer" + i).innerHTML = document.getElementById("itemcontainer" + (i + 1)).innerHTML;
+        }
+        totalItem -= 1;
+        audioDoor.play();
+        enterSink();
+      }
+      else{
+        if(inspectEnabled == true){
+          inspectEnabled = false;
+          document.getElementById("textbox").innerHTML = "It's the medicine cabinet.";
+          setTimeout(cabinet1Part2, 3000);
+        }
+      }
+    }
+    function cabinet1Part2(){
+      document.getElementById("textbox").innerHTML = "I could probably get something to help my sleep from in there.";
+      setTimeout(cabinet1Part3, 5000);
+    }
+    function cabinet1Part3(){
+      document.getElementById("textbox").innerHTML = "But it's locked.";
+      setTimeout(clearText, 3000);
+    }
+    function cabinet2(){
+      sinkCabinetOpen = false;
+      audioDoor.play();
+      enterSink();
+    }
+
+    //SLEEPING PILLS
+    function sleepingPills1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        sleepingPillsTaken = true;
+        audioItem.play();
+        enterSink();
+        document.getElementById("textbox").innerHTML = "The sleeping pills.";
+        setTimeout(sleepingPills2, 3000);
+      }
+    }
+    function sleepingPills2(){
+      document.getElementById("textbox").innerHTML = "These should do the trick.";
+      setTimeout(sleep1, 3000);
+    }
+
+    //CABINET NOTE
+    function cabinetNote1(){
+      if(inspectEnabled == true){
+        sinkNoteTaken = true;
+        totalItem += 1;
+        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Cabinet Note.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"cabinetNoteDescription()\" onmouseout=\"clearDescription()\">";
+        audioItem.play();
+        enterSink();
+      }
+    }
+
+    //PIPE
+    function pipe1(){
+      
+    }
+
+    //Item Functions
+    function clearDescription(){
+      document.getElementById("inventorydescription").innerHTML = "";
+      console.log("cleared");
+    }
+
+    function closetKeyDescription(){
+      document.getElementById("inventorydescription").innerHTML = "<h1>Bathroom Key</h1><p>Great for opening bathrooms.</p>";
+    }
+    function sinkKeyDescription(){
+      document.getElementById("inventorydescription").innerHTML = "<h1>Garage Key</h1><p>Great for opening garages.</p>";
+    }
+    function cabinetNoteDescription(){
+      document.getElementById("inventorydescription").innerHTML = "<h1>Cabinet Note</h1><h2>Toolbox Lock:</h2><h2>M/D Kid's favourite holiday</h2>";
+    }
+
+    function sleep1(){
+      document.getElementById("textbox").innerHTML = "";
+      sleep += 1;
+      brightnessSpeed = 100;
+      setTimeout(sleep2, 10000)
+    }
+    function sleep2(){
+      if(brightnessSetting <= 0){
+        brightnessSpeed = 200;
+        if(sleep >= 2){
+
+        }
+        else{
+          setTimeout(sleepFail1, 8000);
+        }
+      }
+      else{
+        brightnessSetting -= 0.02
+        setTimeout(sleep2, brightnessSpeed);
+      }
+    }
+
+    function sleepFail1(){
+      document.getElementById("textbox").innerHTML = "That wasn't enough.";
+      setTimeout(sleepFail2, 3000);
+    }
+    function sleepFail2(){
+      document.getElementById("textbox").innerHTML = "I'll need to find some other way.";
+      setTimeout(clearText, 3000);
+    }
+
+    function useKey1(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        key1Held = true;
+        document.getElementById("itemcontainer" + key1Slot).style = "background-color:rgb(80, 80, 80)";
+        document.getElementById("itemoutline" + key1Slot).style = "background-color:rgb(80, 80, 80)";
+        document.getElementById("container").onclick = clearUse;
+      }
+    }
+    function useKey2(){
+      if(inspectEnabled == true){
+        inspectEnabled = false;
+        key2Held = true;
+        document.getElementById("itemcontainer" + key2Slot).style = "background-color:rgb(80, 80, 80)";
+        document.getElementById("itemoutline" + key2Slot).style = "background-color:rgb(80, 80, 80)";
+        document.getElementById("container").onclick = clearUse;
+      }
+    }
+
+    function clearUse(){
+      document.getElementById("itemcontainer1").style = "";
+      document.getElementById("itemoutline1").style = "";
+      document.getElementById("itemcontainer2").style = "";
+      document.getElementById("itemoutline2").style = "";
+      document.getElementById("itemcontainer3").style = "";
+      document.getElementById("itemoutline3").style = "";
+      document.getElementById("itemcontainer4").style = "";
+      document.getElementById("itemoutline4").style = "";
+      document.getElementById("itemcontainer5").style = "";
+      document.getElementById("itemoutline5").style = "";
+      document.getElementById("itemcontainer6").style = "";
+      document.getElementById("itemoutline6").style = "";
+      document.getElementById("itemcontainer7").style = "";
+      document.getElementById("itemoutline7").style = "";
+      document.getElementById("itemcontainer8").style = "";
+      document.getElementById("itemoutline8").style = "";
+      document.getElementById("container").onclick = "";
+
+      key1Held = false;
+      key2Held = false;
+      key3Held = false;
+
+      inspectEnabled = true;
+    }
+
+    //Movement Functions
+    //BEDDOOR
+    function enterBedDoor(){
+      if(closetDoorOpen == true){
+        closetDoor2();
+      }
+      document.getElementById("background").src = "Graphics/Backgrounds/BedDoor.png";
+
+      document.getElementById("object1").src = "Graphics/Objects/BedDoor/Closet.png";
+      document.getElementById("object1").style = "height:265px; width:200px; position:relative; top:-405px; left:55px";
+      document.getElementById("object1").onclick = closet1;
+
+      document.getElementById("object2").src = "Graphics/Objects/BedDoor/Door.png";
+      document.getElementById("object2").style = "height:210px; width:125px; position:relative; top:-440px; left:140px";
+      document.getElementById("object2").onclick = door1;
+
+      document.getElementById("object3").src = "";
+      document.getElementById("object3").style = "";
+      document.getElementById("object3").onclick = "";
+
+      document.getElementById("object4").src = "";
+      document.getElementById("object4").style = "";
+      document.getElementById("object4").onclick = "";
+
+      document.getElementById("object5").src = "";
+      document.getElementById("object5").style = "";
+      document.getElementById("object5").onclick = "";
+
+      document.getElementById("moveright").style = "";
+      document.getElementById("moveright").onclick = "";
+
+      document.getElementById("moveleft").style = "cursor:w-resize;";
+      document.getElementById("moveleft").onclick = enterBedroom;
+
+      document.getElementById("moveup").style = "";
+      document.getElementById("moveup").onclick = "";
+
+      document.getElementById("movedown").style = "";
+      document.getElementById("movedown").onclick = "";
+    }
+
+    //BEDROOM
+    function enterBedroom(){
+      document.getElementById("background").src = "Graphics/Backgrounds/BedRoom.png";
+
+      document.getElementById("object1").src = "Graphics/Objects/Bedroom/Calendar.png";
+      document.getElementById("object1").style = "height:120px; width:120px; position:relative; top:-420px; left:270px";
+      document.getElementById("object1").onclick = calendar1;
+
+      document.getElementById("object2").src = "Graphics/Objects/Bedroom/Lamp.png";
+      document.getElementById("object2").style = "height:80px; width:65px; position:relative; top:-230px; left:-90px";
+      document.getElementById("object2").onclick = lamp1;
+
+      document.getElementById("object3").src = "";
+      document.getElementById("object3").style = "";
+      document.getElementById("object3").onclick = "";
+
+      document.getElementById("object4").src = "";
+      document.getElementById("object4").style = "";
+      document.getElementById("object4").onclick = "";
+
+      document.getElementById("object5").src = "";
+      document.getElementById("object5").style = "";
+      document.getElementById("object5").onclick = "";
+
+      document.getElementById("moveright").style = "cursor:e-resize";
+      document.getElementById("moveright").onclick = enterBedDoor;
+
+      document.getElementById("moveleft").style = "";
+      document.getElementById("moveleft").onclick = "";
+
+      document.getElementById("moveup").style = "";
+      document.getElementById("moveup").onclick = "";
+
+      document.getElementById("movedown").style = "";
+      document.getElementById("movedown").onclick = "";
+    }
+
+    //CLOSET
+    function enterCloset(){
+
+      if(closetDoorOpen == false){
+        document.getElementById("background").src = "Graphics/Backgrounds/ClosetClosed.png";
+
+        document.getElementById("object1").src = "";
+        document.getElementById("object1").style = "";
+        document.getElementById("object1").onclick = "";
+
+        document.getElementById("object2").src = "";
+        document.getElementById("object2").style = "";
+        document.getElementById("object2").onclick = "";
+
+        document.getElementById("object3").src = "Graphics/Objects/Closet/Closet Door.png";
+        document.getElementById("object3").style = "height:500px; width:470px; position:relative; top:-500px; left:15px";
+        document.getElementById("object3").onclick = closetDoor1;
+
+        document.getElementById("object4").src = "";
+        document.getElementById("object4").style = "";
+        document.getElementById("object4").onclick = "";
+      }
+      else{
+        document.getElementById("background").src = "Graphics/Backgrounds/ClosetOpen.png";
+
+        document.getElementById("object1").src = "Graphics/Objects/Closet/Poster.png";
+        document.getElementById("object1").style = "height:245px; width:255px; position:relative; top:-725px; left:120px";
+        document.getElementById("object1").onclick = poster1;
+
+        if(closetKeyTaken == false){
+          document.getElementById("object2").src = "Graphics/Objects/Closet/Key.png";
+          document.getElementById("object2").style = "height:35px; width:80px; position:relative; top:-515px; left:-50px";
+          document.getElementById("object2").onclick = key1;
+
+          document.getElementById("object3").src = "Graphics/Objects/Closet/Left Door.png";
+          document.getElementById("object3").style = "height:500px; width:40px; position:relative; top:-500px; left:-335px";
+          document.getElementById("object3").onclick = closetDoor2;
+
+          document.getElementById("object4").src = "Graphics/Objects/Closet/Right Door.png";
+          document.getElementById("object4").style = "height:500px; width:40px; position:relative; top:-500px; left:85px";
+          document.getElementById("object4").onclick = closetDoor2;
+        }
+        else{
+          document.getElementById("object2").src = "";
+          document.getElementById("object2").style = "";
+          document.getElementById("object2").onclick = "";
+
+          document.getElementById("object3").src = "Graphics/Objects/Closet/Left Door.png";
+          document.getElementById("object3").style = "height:500px; width:40px; position:relative; top:-500px; left:-255px";
+          document.getElementById("object3").onclick = closetDoor2;
+
+          document.getElementById("object4").src = "Graphics/Objects/Closet/Right Door.png";
+          document.getElementById("object4").style = "height:500px; width:40px; position:relative; top:-500px; left:165px";
+          document.getElementById("object4").onclick = closetDoor2;
+        }
+      }
+
+      document.getElementById("object5").src = "";
+      document.getElementById("object5").style = "";
+      document.getElementById("object5").onclick = "";
+
+      document.getElementById("moveright").style = "cursor:e-resize";
+      document.getElementById("moveright").onclick = enterBedDoor;
+
+      document.getElementById("moveleft").style = "cursor:w-resize";
+      document.getElementById("moveleft").onclick = enterBedDoor;
+
+      document.getElementById("moveup").style = "cursor:n-resize";
+      document.getElementById("moveup").onclick = enterBedDoor;
+
+      document.getElementById("movedown").style = "cursor:s-resize";
+      document.getElementById("movedown").onclick = enterBedDoor;
+    }
+
+    //HALL
+    function enterHall(){
+      document.getElementById("background").src = "Graphics/Backgrounds/Hall.png";
+
+      document.getElementById("object1").src = "Graphics/Objects/Hall/Bedroom Door.png";
+      document.getElementById("object1").style = "height:290px; width:95px; position:relative; top:-290px; left:400px";
+      document.getElementById("object1").onclick = door2;
+
+      document.getElementById("object2").src = "Graphics/Objects/Hall/Guestroom Door.png";
+      document.getElementById("object2").style = "height:245px; width:55px; position:relative; top:-355px; left:230px";
+      document.getElementById("object2").onclick = door3;
+
+      document.getElementById("object3").src = "Graphics/Objects/Hall/Bathroom Door.png";
+      document.getElementById("object3").style = "height:205px; width:45px; position:relative; top:-385px; left:-45px";
+      document.getElementById("object3").onclick = door4;
+
+      document.getElementById("object4").src = "Graphics/Objects/Hall/Master Bedroom Door.png";
+      document.getElementById("object4").style = "height:275px; width:70px; position:relative; top:-295px; left:-180px";
+      document.getElementById("object4").onclick = door5;
+
+      document.getElementById("object5").src = "Graphics/Objects/Hall/Hallway.png";
+      document.getElementById("object5").style = "height:170px; width:105px; position:relative; top:-490px; left:-70px";
+      document.getElementById("object5").onclick = doorway1;
+
+      document.getElementById("moveright").style = "";
+      document.getElementById("moveright").onclick = "";
+
+      document.getElementById("moveleft").style = "";
+      document.getElementById("moveleft").onclick = "";
+
+      document.getElementById("moveup").style = "";
+      document.getElementById("moveup").onclick = "";
+
+      document.getElementById("movedown").style = "";
+      document.getElementById("movedown").onclick = "";
+    }
+
+    //BATHROOM
+    function enterBathroom(){
+      if(sinkCabinetOpen = true){
+        sinkCabinetOpen = false;
+        audioDoor.play();
+      }
+
+      document.getElementById("background").src = "Graphics/Backgrounds/Bathroom.png";
+
+      document.getElementById("object1").src = "Graphics/Objects/Bathroom/Sink.png";
+      document.getElementById("object1").style = "height:255px; width:95px; position:relative; top:-360px; left:395px";
+      document.getElementById("object1").onclick = sink1;
+
+      document.getElementById("object2").src = "Graphics/Objects/Bathroom/Bath Tub.png";
+      document.getElementById("object2").style = "height:300px; width:290px; position:relative; top:-380px; left:10px";
+      document.getElementById("object2").onclick = bathTub1;
+
+      document.getElementById("object3").src = "Graphics/Objects/Bathroom/Toilet.png";
+      document.getElementById("object3").style = "height:175px; width:115px; position:relative; top:-350px; left:-315px";
+      document.getElementById("object3").onclick = toilet1;
+
+      document.getElementById("object4").src = "Graphics/Objects/Bathroom/Crack.png";
+      document.getElementById("object4").style = "height:90px; width:50px; position:relative; top:-455px; left:10px";
+      document.getElementById("object4").onclick = crack1;
+
+      document.getElementById("object5").src = "";
+      document.getElementById("object5").style = "";
+      document.getElementById("object5").onclick = "";
+
+      document.getElementById("moveright").style = "";
+      document.getElementById("moveright").onclick = "";
+
+      document.getElementById("moveleft").style = "";
+      document.getElementById("moveleft").onclick = "";
+
+      document.getElementById("moveup").style = "cursor: n-resize";
+      document.getElementById("moveup").onclick = function() {audioDoor.play(); enterHall();};
+
+      document.getElementById("movedown").style = "cursor: s-resize";
+      document.getElementById("movedown").onclick = function() {audioDoor.play(); enterHall();};
+    }
+
+    //SINK
+    function enterSink(){
+      if(sinkCabinetOpen == false){
+        if(sinkKeyTaken == false){
+          document.getElementById("background").src = "Graphics/Backgrounds/SinkClosed.png";
+
+          document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+          document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+          document.getElementById("object1").onclick = mirror1;
+
+          document.getElementById("object2").src = "Graphics/Objects/Sink/Key.png";
+          document.getElementById("object2").style = "height:30px; width:30px; position:relative; top:-315px; left:-170px";
+          document.getElementById("object2").onclick = key2;
+
+          document.getElementById("object3").src = "Graphics/Objects/Sink/Cabinet.png";
+          document.getElementById("object3").style = "height:105px; width:370px; position:relative; top:-810px; left:70px";
+          document.getElementById("object3").onclick = cabinet1;
+
+          document.getElementById("object4").src = "";
+          document.getElementById("object4").style = "";
+          document.getElementById("object4").onclick = "";
+
+          document.getElementById("object5").src = "";
+          document.getElementById("object5").style = "";
+          document.getElementById("object5").onclick = "";
+
+          document.getElementById("moveright").style = "cursor:e-resize";
+          document.getElementById("moveright").onclick = enterBathroom;
+
+          document.getElementById("moveleft").style = "cursor:w-resize";
+          document.getElementById("moveleft").onclick = enterBathroom;
+
+          document.getElementById("moveup").style = "cursor:n-resize";
+          document.getElementById("moveup").onclick = enterBathroom;
+
+          document.getElementById("movedown").style = "cursor:s-resize";
+          document.getElementById("movedown").onclick = enterBathroom;
+        }
+        else{
+          document.getElementById("background").src = "Graphics/Backgrounds/SinkClosed.png";
+
+          document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+          document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+          document.getElementById("object1").onclick = mirror1;
+
+          document.getElementById("object2").src = "";
+          document.getElementById("object2").style = "";
+          document.getElementById("object2").onclick = "";
+
+          document.getElementById("object3").src = "Graphics/Objects/Sink/Cabinet.png";
+          document.getElementById("object3").style = "height:105px; width:370px; position:relative; top:-810px; left:70px";
+          document.getElementById("object3").onclick = cabinet1;
+
+          document.getElementById("object4").src = "";
+          document.getElementById("object4").style = "";
+          document.getElementById("object4").onclick = "";
+
+          document.getElementById("object5").src = "";
+          document.getElementById("object5").style = "";
+          document.getElementById("object5").onclick = "";
+
+          document.getElementById("moveright").style = "cursor:e-resize";
+          document.getElementById("moveright").onclick = enterBathroom;
+
+          document.getElementById("moveleft").style = "cursor:w-resize";
+          document.getElementById("moveleft").onclick = enterBathroom;
+
+          document.getElementById("moveup").style = "cursor:n-resize";
+          document.getElementById("moveup").onclick = enterBathroom;
+
+          document.getElementById("movedown").style = "cursor:s-resize";
+          document.getElementById("movedown").onclick = enterBathroom;
+        }
+      }
+      else{
+        if(sinkKeyTaken == false){
+          if(sleepingPillsTaken == false){
+            if(sinkNoteTaken == false){
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "Graphics/Objects/Sink/Key.png";
+              document.getElementById("object2").style = "height:30px; width:30px; position:relative; top:-315px; left:-170px";
+              document.getElementById("object2").onclick = key2;
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-355px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "Graphics/Objects/Sink/Sleeping Pills.png";
+              document.getElementById("object4").style = "height:85px; width:70px; position:relative; top:-800px; left:180px";
+              document.getElementById("object4").onclick = sleepingPills1;
+
+              document.getElementById("object5").src = "Graphics/Objects/Sink/Note.png";
+              document.getElementById("object5").style = "height:75px; width:115px; position:relative; top:-805px; left:195px";
+              document.getElementById("object5").onclick = cabinetNote1;
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+            else{
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "Graphics/Objects/Sink/Key.png";
+              document.getElementById("object2").style = "height:30px; width:30px; position:relative; top:-315px; left:-170px";
+              document.getElementById("object2").onclick = key2;
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-355px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "Graphics/Objects/Sink/Sleeping Pills.png";
+              document.getElementById("object4").style = "height:85px; width:70px; position:relative; top:-800px; left:180px";
+              document.getElementById("object4").onclick = sleepingPills1;
+
+              document.getElementById("object5").src = "";
+              document.getElementById("object5").style = "";
+              document.getElementById("object5").onclick = "";
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+          }
+          else{
+            if(sinkNoteTaken == false){
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "Graphics/Objects/Sink/Key.png";
+              document.getElementById("object2").style = "height:30px; width:30px; position:relative; top:-315px; left:-170px";
+              document.getElementById("object2").onclick = key2;
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-355px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "";
+              document.getElementById("object4").style = "";
+              document.getElementById("object4").onclick = "";
+
+              document.getElementById("object5").src = "Graphics/Objects/Sink/Note.png";
+              document.getElementById("object5").style = "height:75px; width:115px; position:relative; top:-795px; left:265px";
+              document.getElementById("object5").onclick = cabinetNote1;
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+            else{
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "Graphics/Objects/Sink/Key.png";
+              document.getElementById("object2").style = "height:30px; width:30px; position:relative; top:-315px; left:-170px";
+              document.getElementById("object2").onclick = key2;
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-355px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "";
+              document.getElementById("object4").style = "";
+              document.getElementById("object4").onclick = "";
+
+              document.getElementById("object5").src = "";
+              document.getElementById("object5").style = "";
+              document.getElementById("object5").onclick = "";
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+          }
+        }
+        else{
+          if(sleepingPillsTaken == false){
+            if(sinkNoteTaken == false){
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "";
+              document.getElementById("object2").style = "";
+              document.getElementById("object2").onclick = "";
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-325px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "Graphics/Objects/Sink/Sleeping Pills.png";
+              document.getElementById("object4").style = "height:85px; width:70px; position:relative; top:-715px; left:-235px";
+              document.getElementById("object4").onclick = sleepingPills1;
+
+              document.getElementById("object5").src = "Graphics/Objects/Sink/Note.png";
+              document.getElementById("object5").style = "height:75px; width:115px; position:relative; top:-795px; left:265px";
+              document.getElementById("object5").onclick = cabinetNote1;
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+            else{
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "";
+              document.getElementById("object2").style = "";
+              document.getElementById("object2").onclick = "";
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-325px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "Graphics/Objects/Sink/Sleeping Pills.png";
+              document.getElementById("object4").style = "height:85px; width:70px; position:relative; top:-715px; left:-235px";
+              document.getElementById("object4").onclick = sleepingPills1;
+
+              document.getElementById("object5").src = "";
+              document.getElementById("object5").style = "";
+              document.getElementById("object5").onclick = "";
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+          }
+          else{
+            if(sinkNoteTaken == false){
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "";
+              document.getElementById("object2").style = "";
+              document.getElementById("object2").onclick = "";
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-325px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "";
+              document.getElementById("object4").style = "";
+              document.getElementById("object4").onclick = "";
+
+              document.getElementById("object5").src = "Graphics/Objects/Sink/Note.png";
+              document.getElementById("object5").style = "height:75px; width:115px; position:relative; top:-795px; left:265px";
+              document.getElementById("object5").onclick = cabinetNote1;
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+            else{
+              document.getElementById("background").src = "Graphics/Backgrounds/SinkOpen.png";
+
+              document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror.png";
+              document.getElementById("object1").style = "height:310px; width:325px; position:relative; top:-395px; left:95px";
+              document.getElementById("object1").onclick = mirror1;
+
+              document.getElementById("object2").src = "";
+              document.getElementById("object2").style = "";
+              document.getElementById("object2").onclick = "";
+
+              document.getElementById("object3").src = "Graphics/Objects/Sink/Open Cabinet.png";
+              document.getElementById("object3").style = "height:95px; width:90px; position:relative; top:-715px; left:-325px";
+              document.getElementById("object3").onclick = cabinet2;
+
+              document.getElementById("object4").src = "";
+              document.getElementById("object4").style = "";
+              document.getElementById("object4").onclick = "";
+
+              document.getElementById("object5").src = "";
+              document.getElementById("object5").style = "";
+              document.getElementById("object5").onclick = "";
+
+              document.getElementById("moveright").style = "cursor:e-resize";
+              document.getElementById("moveright").onclick = enterBathroom;
+
+              document.getElementById("moveleft").style = "cursor:w-resize";
+              document.getElementById("moveleft").onclick = enterBathroom;
+
+              document.getElementById("moveup").style = "cursor:n-resize";
+              document.getElementById("moveup").onclick = enterBathroom;
+
+              document.getElementById("movedown").style = "cursor:s-resize";
+              document.getElementById("movedown").onclick = enterBathroom;
+            }
+          }
+        }
+      }
+    }
+
+    //CRACK
+    function enterCrack(){
+      if(crackOpened == false){
+        document.getElementById("background").src = "Graphics/Backgrounds/Crack.png";
+
+        document.getElementById("object1").src = "Graphics/Objects/Crack/Crack.png";
+        document.getElementById("object1").style = "height:395px; width:300px; position:relative; top:-435px; left:110px";
+        document.getElementById("object1").onclick = crack2;
+
+        document.getElementById("object2").src = "";
+        document.getElementById("object2").style = "";
+        document.getElementById("object2").onclick = "";
+
+        document.getElementById("object3").src = "";
+        document.getElementById("object3").style = "";
+        document.getElementById("object3").onclick = "";
+
+        document.getElementById("object4").src = "";
+        document.getElementById("object4").style = "";
+        document.getElementById("object4").onclick = "";
+
+        document.getElementById("object5").src = "";
+        document.getElementById("object5").style = "";
+        document.getElementById("object5").onclick = "";
+
+        document.getElementById("moveright").style = "cursor:e-resize";
+        document.getElementById("moveright").onclick = enterBathroom;
+
+        document.getElementById("moveleft").style = "cursor:w-resize";
+        document.getElementById("moveleft").onclick = enterBathroom;
+
+        document.getElementById("moveup").style = "cursor:n-resize";
+        document.getElementById("moveup").onclick = enterBathroom;
+
+        document.getElementById("movedown").style = "cursor:s-resize";
+        document.getElementById("movedown").onclick = enterBathroom;
+      }
+      else{
+        if(pipeTaken == false){
+
+        }
+        else{
+
+        }
+      }
+    }
+
+    //LIVING ROOM
+    function enterLivingRoom(){
+
+    }
+
+    /*
+    <img id="object1" src="Graphics/Objects/Bedroom/Calendar.png" class="clickable" style="height:120px; width:120px; position:relative; top:-420px; left:270px" onclick="calendar1()">
+    <img id="object2" src="Graphics/Objects/Bedroom/Lamp.png" class="clickable" style="height:80px; width:65px; position:relative; top:-230px; left:-90px" onclick="lamp1()">
+    <div id="move1" class="move" onclick="enterBedDoor()" style="cursor:e-resize; margin-left:auto; float:right">
+    </div>
+    */
+
+    //BRIGHTNESS FUNCTIONS
+
+    function loopBrighter(){
+      if(brightnessSetting >= 0.5){
+        setTimeout(loopDarker, brightnessSpeed);
+      }
+      else{
+        brightnessSetting += 0.01;
+        containerCSS.style.filter = "brightness(" + brightnessSetting + ")";
+        console.log("Brighten!");
+        setTimeout(loopBrighter, brightnessSpeed);
+      }
+    }
+    function loopDarker(){
+      if(brightnessSetting <= 0.4){
+        setTimeout(loopBrighter, brightnessSpeed);
+      }
+      else{
+        brightnessSetting -= 0.01;
+        containerCSS.style.filter = "brightness(" + brightnessSetting + ")";
+        console.log("Darken!");
+        setTimeout(loopDarker, brightnessSpeed);
+      }
+    }
+  </script>
+</body>
