@@ -19,6 +19,11 @@
       image-rendering: pixelated;
       image-rendering: crisp-edges;
       -ms-interpolation-mode: nearest-neighbor;
+			-khtml-user-select: none;
+    	-o-user-select: none;
+    	-moz-user-select: none;
+    	-webkit-user-select: none;
+    	user-select: none;
     }
 
 		.windowscare{
@@ -132,7 +137,7 @@
 <body id="body">
   <!--Note for Placing Objects: There is a 4 pixel margin between images by default.-->
   <div class="container" id="container">
-    <img id="background" src="Graphics/Backgrounds/Bedroom.png" style="height:500px; width:500px">
+    <img id="background" src="Graphics/Backgrounds/Bedroom.png" style="height:500px; width:500px" draggable="false">
     <div id="moveright" class="moveright" onclick="enterBedDoor()" style="cursor:e-resize">
     </div>
     <div id="moveleft" class="moveleft">
@@ -141,11 +146,11 @@
     </div>
     <div id="movedown" class="movedown">
     </div>
-    <img id="object1" src="Graphics/Objects/Bedroom/Calendar.png" class="clickable" style="height:120px; width:120px; position:relative; top:-420px; left:270px" onclick="calendar1()">
-    <img id="object2" src="Graphics/Objects/Bedroom/Lamp.png" class="clickable" style="height:80px; width:65px; position:relative; top:-230px; left:-90px" onclick="lamp1()">
-    <img id="object3" class="clickable">
-    <img id="object4" class="clickable">
-    <img id="object5" class="clickable">
+    <img id="object1" src="Graphics/Objects/Bedroom/Calendar.png" class="clickable" style="height:120px; width:120px; position:relative; top:-420px; left:270px" onclick="calendar1()" draggable="false">
+    <img id="object2" src="Graphics/Objects/Bedroom/Lamp.png" class="clickable" style="height:80px; width:65px; position:relative; top:-230px; left:-90px" onclick="lamp1()" draggable="false">
+    <img id="object3" class="clickable" draggable="false">
+    <img id="object4" class="clickable" draggable="false">
+    <img id="object5" class="clickable" draggable="false">
   </div>
 
   <div class="textbox" id="textbox">
@@ -240,6 +245,7 @@
     var crackOpened = false;
 		var kitchenDoorUnlocked = false;
 		var toolBoxUnlocked = false;
+		var toolBoxOpen = false;
 
 		var windowScareSeen = false;
 		var windowScareHappening = false;
@@ -257,6 +263,10 @@
     var key3Held = false;
     var hammerHeld = false;
 		var wrenchHeld = false;
+
+		var combinationNumber1 = 0;
+		var combinationNumber2 = 0;
+		var combinationNumber3 = 0;
 
     var sleep = 0;
 
@@ -340,14 +350,12 @@
 
     //CLOSET KEY
     function key1(){
-      if(inspectEnabled == true){
-        closetKeyTaken = true;
-        totalItem += 1;
-        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Bathroom Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey1()\" onmouseover=\"closetKeyDescription()\" onmouseout=\"clearDescription()\">";
-        key1Slot = (totalItem + 1) - 1;
-        audioItem.play();
-        enterCloset();
-      }
+      closetKeyTaken = true;
+      totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Bathroom Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey1()\" onmouseover=\"closetKeyDescription()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      key1Slot = (totalItem + 1) - 1;
+      audioItem.play();
+      enterCloset();
     }
 
     //CLOSET DOOR
@@ -504,14 +512,12 @@
 
     //SINK KEY
     function key2(){
-      if(inspectEnabled == true){
-        sinkKeyTaken = true;
-        totalItem += 1;
-        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Kitchen Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey2()\" onmouseover=\"sinkKeyDescription()\" onmouseout=\"clearDescription()\">";
-        key2Slot = (totalItem + 1) - 1;
-        audioItem.play();
-        enterSink();
-      }
+      sinkKeyTaken = true;
+      totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Kitchen Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey2()\" onmouseover=\"sinkKeyDescription()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      key2Slot = (totalItem + 1) - 1;
+      audioItem.play();
+      enterSink();
     }
 
     //CABINET
@@ -574,31 +580,29 @@
 
     //CABINET NOTE
     function cabinetNote1(){
-      if(inspectEnabled == true){
-        sinkNoteTaken = true;
-        totalItem += 1;
-        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Cabinet Note.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"cabinetNoteDescription()\" onmouseout=\"clearDescription()\">";
-        audioItem.play();
-        enterSink();
-      }
+      sinkNoteTaken = true;
+      totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Cabinet Note.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"cabinetNoteDescription()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+      enterSink();
     }
 
     //PIPE
     function pipe1(){
-			if(inspectEnabled == true){
-				inspectEnabled = false;
-				if(wrenchHeld == true){
-        	pipeTaken = true;
-        	audioItem.play();
-					document.getElementById("textbox").innerHTML = "A metal pipe.";
-	        setTimeout(pipe1Part2, 3000);
-        	enterCrack();
-				}
-				else{
+			inspectEnabled = false;
+			if(wrenchHeld == true){
+      	pipeTaken = true;
+      	audioItem.play();
+				document.getElementById("textbox").innerHTML = "A heavy metal pipe.";
+	       setTimeout(pipe1Part2, 3000);
+      	enterCrack();
+			}
+			else{
+				if(inspectEnabled == true){
 					document.getElementById("textbox").innerHTML = "It's a plumbing pipe.";
-		      setTimeout(pipe2, 3000);
+		     	setTimeout(pipe2, 3000);
 				}
-      }
+			}
     }
 		function pipe1Part2(){
 			document.getElementById("textbox").innerHTML = "This should do nicely.";
@@ -658,14 +662,12 @@
 
 		//HAMMER
 		function hammer1(){
-			if(inspectEnabled == true){
-        hammerTaken = true;
-        totalItem += 1;
-        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Hammer.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useHammer()\" onmouseover=\"hammerDescription()\" onmouseout=\"clearDescription()\">";
-        hammerSlot = (totalItem + 1) - 1;
-        audioItem.play();
-        enterLivingRoom();
-      }
+      hammerTaken = true;
+      totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Hammer.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useHammer()\" onmouseover=\"hammerDescription()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      hammerSlot = (totalItem + 1) - 1;
+      audioItem.play();
+      enterLivingRoom();
 		}
 
 		//STOVE
@@ -716,16 +718,86 @@
       setTimeout(clearText, 3000);
 		}
 
+		//TOOLBOX LID
+		function toolboxLid1(){
+			if(toolBoxUnlocked == true){
+				toolBoxOpen = true;
+				audioDoor.play();
+				enterToolbox();
+			}
+			else if(combinationNumber1 == 2 && combinationNumber2 == 1 && combinationNumber3 == 4){
+				toolBoxUnlocked = true;
+				toolBoxOpen = true;
+				audioDoor.play();
+				enterToolbox();
+			}
+			else{
+				if(inspectEnabled == true){
+					inspectEnabled = false;
+					document.getElementById("textbox").innerHTML = "The toolbox.";
+					setTimeout(toolboxLidPart2, 3000);
+				}
+			}
+		}
+		function toolboxLidPart2(){
+			document.getElementById("textbox").innerHTML = "I can't open it.";
+			setTimeout(toolboxLidPart3, 3000);
+		}
+		function toolboxLidPart3(){
+			document.getElementById("textbox").innerHTML = "I'll need the combination.";
+			setTimeout(clearText, 3000);
+		}
+		function toolboxLid2(){
+
+		}
+
+		//COMBINATIONS
+		function combination1(){
+			if(combinationNumber1 >= 9){
+				combinationNumber1 = 0;
+			}
+			else{
+				combinationNumber1 += 1;
+			}
+			enterToolbox();
+		}
+		function combination2(){
+			if(combinationNumber2 >= 9){
+				combinationNumber2 = 0;
+			}
+			else{
+				combinationNumber2 += 1;
+			}
+			enterToolbox();
+		}
+		function combination3(){
+			if(combinationNumber3 >= 9){
+				combinationNumber3 = 0;
+			}
+			else{
+				combinationNumber3 += 1;
+			}
+			enterToolbox();
+		}
+
+		//WRENCH
+		function wrench1(){
+			wrenchTaken = true;
+      totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Wrench.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useWrench()\" onmouseover=\"wrenchDescription()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      wrenchSlot = (totalItem + 1) - 1;
+      audioItem.play();
+      enterToolbox();
+		}
+
 		//WINDOW KEY
 		function key3(){
-			if(inspectEnabled == true){
-        windowKeyTaken = true;
-        totalItem += 1;
-        document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Window Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey3()\" onmouseover=\"windowKeyDescription()\" onmouseout=\"clearDescription()\">";
-        key3Slot = (totalItem + 1) - 1;
-        audioItem.play();
-        enterWindow();
-      }
+      windowKeyTaken = true;
+      totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Window Key.png\" class=\"clickable\" style=\"height:100px; width:100px\" onclick=\"useKey3()\" onmouseover=\"windowKeyDescription()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      key3Slot = (totalItem + 1) - 1;
+      audioItem.play();
+      enterWindow();
 		}
 
     //Item Functions
@@ -747,7 +819,10 @@
       document.getElementById("inventorydescription").innerHTML = "<h1>Cabinet Note</h1><h2>Toolbox Lock:</h2><h2>M/D Kid's favourite holiday</h2>";
     }
 		function hammerDescription(){
-				document.getElementById("inventorydescription").innerHTML = "<h1>Hammer</h1><p>Great for smashing walls.</p>";
+			document.getElementById("inventorydescription").innerHTML = "<h1>Hammer</h1><p>Great for smashing walls.</p>";
+		}
+		function wrenchDescription(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Wrench</h1><p>Great for loosening pipes.</p>";
 		}
 
     function sleep1(){
@@ -760,7 +835,7 @@
       if(brightnessSetting <= 0){
         brightnessSpeed = 200;
         if(sleep >= 2){
-
+					sleep3();
         }
         else{
           setTimeout(sleepFail1, 8000);
@@ -771,6 +846,10 @@
         setTimeout(sleep2, brightnessSpeed);
       }
     }
+		function sleep3(){
+			inspectEnabled = false;
+			document.getElementById("textbox").innerHTML = "TO BE CONTINUED..."
+		}
 
     function sleepFail1(){
       document.getElementById("textbox").innerHTML = "That wasn't enough.";
@@ -812,8 +891,8 @@
 			}
 		}
 		function windowScare3Appear(){
-			if(windowScareOpacity <= 0.4){
-				windowScareOpacity += 0.0005;
+			if(windowScareOpacity <= 0.3){
+				windowScareOpacity += 0.001;
 				document.getElementById("object1").style.opacity = windowScareOpacity;
 				console.log("dingus");
 
@@ -832,7 +911,7 @@
 		}
 		function windowScare3Disappear(){
 			if(windowScareOpacity >= 0){
-				windowScareOpacity -= 0.001;
+				windowScareOpacity -= 0.002;
 				document.getElementById("object1").style.opacity = windowScareOpacity;
 				console.log("dongus");
 
@@ -849,6 +928,24 @@
 				document.getElementById("object1").src = "Graphics/Objects/Window/Window.png";
 				enterWindow();
 			}
+		}
+
+		function mirrorScare1(){
+			inspectEnabled = false;
+			mirrorScareSeen = true;
+
+			document.getElementById("moveright").onclick = "";
+			document.getElementById("moveleft").onclick = "";
+			document.getElementById("moveup").onclick = "";
+			document.getElementById("movedown").onclick = "";
+
+			document.getElementById("object1").src = "Graphics/Objects/Sink/Mirror Scare.png";
+
+			setTimeout(mirrorScare2, 200);
+		}
+		function mirrorScare2(){
+			inspectEnabled = true;
+			enterSink();
 		}
 
     function useKey1(){
@@ -884,6 +981,15 @@
         hammerHeld = true;
         document.getElementById("itemcontainer" + hammerSlot).style = "background-color:rgb(80, 80, 80)";
         document.getElementById("itemoutline" + hammerSlot).style = "background-color:rgb(80, 80, 80)";
+        document.getElementById("container").onclick = clearUse;
+      }
+		}
+		function useWrench(){
+			if(inspectEnabled == true){
+        inspectEnabled = false;
+        wrenchHeld = true;
+        document.getElementById("itemcontainer" + wrenchSlot).style = "background-color:rgb(80, 80, 80)";
+        document.getElementById("itemoutline" + wrenchSlot).style = "background-color:rgb(80, 80, 80)";
         document.getElementById("container").onclick = clearUse;
       }
 		}
@@ -1537,6 +1643,11 @@
           }
         }
       }
+			if(windowKeyTaken == true){
+				if(mirrorScareSeen == false){
+					mirrorScare1();
+				}
+			}
     }
 
     //CRACK
@@ -1779,7 +1890,150 @@
 
 		//TOOLBOX
 		function enterToolbox(){
+			if(toolBoxUnlocked == false){
+				document.getElementById("background").src = "Graphics/Backgrounds/ToolboxClosed.png";
 
+				document.getElementById("object1").src = "Graphics/Objects/Toolbox/Toolbox Lid.png";
+				document.getElementById("object1").style = "height:90px; width:400px; position:relative; top:-305px; left:50px";
+				document.getElementById("object1").onclick = toolboxLid1;
+
+				document.getElementById("object2").src = "Graphics/Objects/Toolbox/" + combinationNumber1 + ".png";
+				document.getElementById("object2").style = "height:35px; width:25px; position:relative; top:-265px; left:-195px";
+				document.getElementById("object2").onclick = combination1;
+
+				document.getElementById("object3").src = "Graphics/Objects/Toolbox/" + combinationNumber2 + ".png";
+				document.getElementById("object3").style = "height:35px; width:25px; position:relative; top:-265px; left:-185px";
+				document.getElementById("object3").onclick = combination2;
+
+				document.getElementById("object4").src = "Graphics/Objects/Toolbox/" + combinationNumber3 + ".png";
+				document.getElementById("object4").style = "height:35px; width:25px; position:relative; top:-265px; left:-175px";
+				document.getElementById("object4").onclick = combination3;
+
+				document.getElementById("object5").src = "";
+				document.getElementById("object5").style = "";
+				document.getElementById("object5").onclick = "";
+
+				document.getElementById("moveright").style = "cursor:e-resize";
+				document.getElementById("moveright").onclick = enterKitchen;
+
+				document.getElementById("moveleft").style = "cursor:w-resize";
+				document.getElementById("moveleft").onclick = enterKitchen;
+
+				document.getElementById("moveup").style = "cursor:n-resize";
+				document.getElementById("moveup").onclick = enterKitchen;
+
+				document.getElementById("movedown").style = "cursor:s-resize";
+				document.getElementById("movedown").onclick = enterKitchen;
+			}
+			else{
+				if(toolBoxOpen == true){
+					if(wrenchTaken == false){
+						document.getElementById("background").src = "Graphics/Backgrounds/ToolboxOpen.png";
+
+						document.getElementById("object1").src = "Graphics/Objects/Toolbox/Toolbox Lid Opened.png";
+						document.getElementById("object1").style = "height:55px; width:395px; position:relative; top:-330px; left:50px";
+						document.getElementById("object1").onclick = toolboxLid2;
+
+						document.getElementById("object2").src = "Graphics/Objects/Toolbox/Wrench.png";
+						document.getElementById("object2").style = "height:65px; width:170px; position:relative; top:-335px; left:170px";
+						document.getElementById("object2").onclick = wrench1;
+
+						document.getElementById("object3").src = "";
+						document.getElementById("object3").style = "";
+						document.getElementById("object3").onclick = "";
+
+						document.getElementById("object4").src = "";
+						document.getElementById("object4").style = "";
+						document.getElementById("object4").onclick = "";
+
+						document.getElementById("object5").src = "";
+						document.getElementById("object5").style = "";
+						document.getElementById("object5").onclick = "";
+
+						document.getElementById("moveright").style = "cursor:e-resize";
+						document.getElementById("moveright").onclick = enterKitchen;
+
+						document.getElementById("moveleft").style = "cursor:w-resize";
+						document.getElementById("moveleft").onclick = enterKitchen;
+
+						document.getElementById("moveup").style = "cursor:n-resize";
+						document.getElementById("moveup").onclick = enterKitchen;
+
+						document.getElementById("movedown").style = "cursor:s-resize";
+						document.getElementById("movedown").onclick = enterKitchen;
+					}
+					else{
+						document.getElementById("background").src = "Graphics/Backgrounds/ToolboxOpen.png";
+
+						document.getElementById("object1").src = "Graphics/Objects/Toolbox/Toolbox Lid Opened.png";
+						document.getElementById("object1").style = "height:55px; width:395px; position:relative; top:-330px; left:50px";
+						document.getElementById("object1").onclick = toolboxLid2;
+
+						document.getElementById("object2").src = "";
+						document.getElementById("object2").style = "";
+						document.getElementById("object2").onclick = "";
+
+						document.getElementById("object3").src = "";
+						document.getElementById("object3").style = "";
+						document.getElementById("object3").onclick = "";
+
+						document.getElementById("object4").src = "";
+						document.getElementById("object4").style = "";
+						document.getElementById("object4").onclick = "";
+
+						document.getElementById("object5").src = "";
+						document.getElementById("object5").style = "";
+						document.getElementById("object5").onclick = "";
+
+						document.getElementById("moveright").style = "cursor:e-resize";
+						document.getElementById("moveright").onclick = enterKitchen;
+
+						document.getElementById("moveleft").style = "cursor:w-resize";
+						document.getElementById("moveleft").onclick = enterKitchen;
+
+						document.getElementById("moveup").style = "cursor:n-resize";
+						document.getElementById("moveup").onclick = enterKitchen;
+
+						document.getElementById("movedown").style = "cursor:s-resize";
+						document.getElementById("movedown").onclick = enterKitchen;
+					}
+				}
+				else{
+					document.getElementById("background").src = "Graphics/Backgrounds/ToolboxClosed.png";
+
+					document.getElementById("object1").src = "Graphics/Objects/Toolbox/Toolbox Lid.png";
+					document.getElementById("object1").style = "height:90px; width:400px; position:relative; top:-305px; left:50px";
+					document.getElementById("object1").onclick = toolboxLid1;
+
+					document.getElementById("object2").src = "";
+					document.getElementById("object2").style = "";
+					document.getElementById("object2").onclick = "";
+
+					document.getElementById("object3").src = "";
+					document.getElementById("object3").style = "";
+					document.getElementById("object3").onclick = "";
+
+					document.getElementById("object4").src = "";
+					document.getElementById("object4").style = "";
+					document.getElementById("object4").onclick = "";
+
+					document.getElementById("object5").src = "";
+					document.getElementById("object5").style = "";
+					document.getElementById("object5").onclick = "";
+
+					document.getElementById("moveright").style = "cursor:e-resize";
+					document.getElementById("moveright").onclick = enterKitchen;
+
+					document.getElementById("moveleft").style = "cursor:w-resize";
+					document.getElementById("moveleft").onclick = enterKitchen;
+
+					document.getElementById("moveup").style = "cursor:n-resize";
+					document.getElementById("moveup").onclick = enterKitchen;
+
+					document.getElementById("movedown").style = "cursor:s-resize";
+					document.getElementById("movedown").onclick = enterKitchen;
+				}
+			}
 		}
 
     /*
