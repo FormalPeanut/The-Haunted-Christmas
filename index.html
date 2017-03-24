@@ -310,8 +310,6 @@
     //TEXT CONTROLS
     var inspectEnabled = false;
 
-    setTimeout(introBedroom, 3000);
-
     //BRIGHTNESS CONTROLS
     var containerCSS = document.querySelector(".container");
     var brightnessSetting = 0.4;
@@ -376,6 +374,7 @@
 		//OVERLAY FUNCTION
 		function removeOverlay(){
 			document.getElementById("overlay").remove();
+			introBedroom();
 		}
 
     //TEXT FUNCTIONS
