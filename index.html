@@ -114,6 +114,13 @@
     	user-select: none;
     }
 
+		.overlay{
+			color: rgb(80, 80, 80);
+			font-family: cursive, sans-serif, strong;
+      font-size: 100px;
+      text-align: center;
+		}
+
 		.windowscare{
 			opacity: 0;
 		}
@@ -222,8 +229,10 @@
 	<meta charset="UTF-8">
 </head>
 
-<body id="body">
-  <!--Note for Placing Objects: There is a 4 pixel margin between images by default.-->
+<body id="body" onload="removeOverlay()">
+	<div id="overlay" class="overlay" style="background-color:black; position:fixed; z-index:1000; top:0px; left:0px; width:100%; height:100%">
+		<br>Loading...
+	</div>
   <div class="container" id="container">
     <img id="background" src="Graphics/Backgrounds/Bedroom.png" style="height:500px; width:500px" draggable="false">
     <div id="moveright" class="moveright" onclick="enterBedDoor()" style="cursor:e-resize">
@@ -363,6 +372,11 @@
     var audioItem = new Audio("Sounds/Item Pickup.wav");
     var audioSmash = new Audio("Sounds/Smash.wav");
 		var audioSmashHead = new Audio("Sounds/Head Smash.wav");
+
+		//OVERLAY FUNCTION
+		function removeOverlay(){
+			document.getElementById("overlay").remove();
+		}
 
     //TEXT FUNCTIONS
     function clearText(){
