@@ -18,6 +18,20 @@
 	<link rel="preload" href="Graphics/Backgrounds/Hall.png">
 	<link rel="preload" href="Graphics/Backgrounds/Kitchen.png">
 	<link rel="preload" href="Graphics/Backgrounds/LivingRoom.png">
+	<link rel="preload" href="Graphics/Backgrounds/Presents 1.png">
+	<link rel="preload" href="Graphics/Backgrounds/Presents 2.png">
+	<link rel="preload" href="Graphics/Backgrounds/Presents 3.png">
+	<link rel="preload" href="Graphics/Backgrounds/Presents 4.png">
+	<link rel="preload" href="Graphics/Backgrounds/Presents 5.png">
+	<link rel="preload" href="Graphics/Backgrounds/Presents 6.png">
+	<link rel="preload" href="Graphics/Backgrounds/Presents 7.png">
+	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 1.png">
+	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 2.png">
+	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 3.png">
+	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 4.png">
+	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 5.png">
+	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 6.png">
+	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 7.png">
 	<link rel="preload" href="Graphics/Backgrounds/SinkClosed.png">
 	<link rel="preload" href="Graphics/Backgrounds/SinkOpen.png">
 	<link rel="preload" href="Graphics/Backgrounds/ToolboxClosed.png">
@@ -62,6 +76,7 @@
 	<link rel="preload" href="Graphics/Objects/LivingRoom/Hallway.png">
 	<link rel="preload" href="Graphics/Objects/LivingRoom/Hammer.png">
 	<link rel="preload" href="Graphics/Objects/LivingRoom/Kitchen Door.png">
+	<link rel="preload" href="Graphics/Objects/LivingRoom/Dream Christmas Tree.png">
 
 	<link rel="preload" href="Graphics/Objects/Kitchen/Door.png">
 	<link rel="preload" href="Graphics/Objects/Kitchen/Stove.png">
@@ -87,12 +102,31 @@
 	<link rel="preload" href="Graphics/Objects/Toolbox/Toolbox Lid.png">
 	<link rel="preload" href="Graphics/Objects/Toolbox/Wrench.png">
 
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Note 1.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Note 2.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Note 3.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Note 4.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Note 5.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Note 6.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Present 1.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Present 2.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Present 3.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Present 4.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Present 5.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Present 6.png">
+	<link rel="preload" href="Graphics/Objects/ChristmasTree/Present 7.png">
+
 	<link rel="preload" href="Graphics/Items/Bathroom Key.png">
 	<link rel="preload" href="Graphics/Items/Cabinet Note.png">
 	<link rel="preload" href="Graphics/Items/Kitchen Key.png">
 	<link rel="preload" href="Graphics/Items/Hammer.png">
 	<link rel="preload" href="Graphics/Items/Window Key.png">
 	<link rel="preload" href="Graphics/Items/Wrench.png">
+	<link rel="preload" href="Graphics/Items/Note 1.png">
+	<link rel="preload" href="Graphics/Items/Note 2.png">
+	<link rel="preload" href="Graphics/Items/Note 3.png">
+	<link rel="preload" href="Graphics/Items/Note 4.png">
+	<link rel="preload" href="Graphics/Items/Note 5.png">
 
 	<style>
     body{
@@ -185,6 +219,21 @@
       font-family: cursive, sans-serif, strong;
       font-size: 30px;
     }
+		.inventorydescription h3{
+			color: rgb(195, 0, 0);
+			font-family: cursive, sans-serif, strong, chiller;
+			font-size: 30px;
+		}
+		.inventorydescription h4{
+			color: rgb(100, 100, 100);
+      font-family: cursive, sans-serif, strong;
+      font-size: 18px;
+		}
+		.inventorydescription h5{
+			color: rgb(195, 0, 0);
+			font-family: cursive, sans-serif, strong, chiller;
+			font-size: 50px;
+		}
     .inventorydescription p{
       color: rgb(60, 60, 60);
       font-family: cursive, sans-serif;
@@ -314,6 +363,8 @@
     var containerCSS = document.querySelector(".container");
     var brightnessSetting = 0.4;
     var brightnessSpeed = 200;
+		var upperBrightness = 0.5;
+		var lowerBrightness = 0.4;
 
     loopBrighter();
 
@@ -324,7 +375,26 @@
     //ITEM CONTROLS
     var totalItem = 0;
 
-    var closetKeyTaken = false;
+    var key1Slot;
+    var key2Slot;
+    var key3Slot;
+		var hammerSlot;
+		var wrenchSlot;
+
+		var dreamHammerSlot;
+
+    var key1Held = false;
+    var key2Held = false;
+    var key3Held = false;
+    var hammerHeld = false;
+		var wrenchHeld = false;
+
+		//BACKGROUND CONTROLS
+		var combinationNumber1 = 0;
+		var combinationNumber2 = 0;
+		var combinationNumber3 = 0;
+
+		var closetKeyTaken = false;
     var sinkKeyTaken = false;
     var sleepingPillsTaken = false;
     var sinkNoteTaken = false;
@@ -332,6 +402,7 @@
 		var hammerTaken = false;
 		var windowKeyTaken = false;
 		var wrenchTaken = false;
+		var dreamHammerTaken = false;
 
     var closetDoorOpen = false;
     var bathroomDoorUnlocked = false;
@@ -341,35 +412,29 @@
 		var kitchenDoorUnlocked = false;
 		var toolBoxUnlocked = false;
 		var toolBoxOpen = false;
+		var dreamKitchenSeen = false;
+		var dreamHallSeen = false;
 
 		var windowScareSeen = false;
 		var windowScareHappening = false;
 		var mirrorScareSeen = false;
 		var mirrorScareHappening = false;
 
-    var key1Slot;
-    var key2Slot;
-    var key3Slot;
-		var hammerSlot;
-		var wrenchSlot;
-
-    var key1Held = false;
-    var key2Held = false;
-    var key3Held = false;
-    var hammerHeld = false;
-		var wrenchHeld = false;
-
-		var combinationNumber1 = 0;
-		var combinationNumber2 = 0;
-		var combinationNumber3 = 0;
-
     var sleep = 0;
+
+		var presentsScreen = 1;
 
     //AUDIO CONTROLS
     var audioDoor = new Audio("Sounds/Door.wav");
     var audioItem = new Audio("Sounds/Item Pickup.wav");
     var audioSmash = new Audio("Sounds/Smash.wav");
 		var audioSmashHead = new Audio("Sounds/Head Smash.wav");
+		var audioPresent = new Audio("Sounds/Presents.wav");
+
+		var music = new Audio("Sounds/We Wish You A Merry Christmas.wav");
+
+		music.loop = true;
+		music.volume = 0.25;
 
 		//OVERLAY FUNCTION
 		function removeOverlay(){
@@ -390,7 +455,7 @@
       setTimeout(clearText, 5000);
     }
 
-    //Inspect Text Functions
+    //Inspect Functions
     //CALENDAR
     function calendar1(){
       if(inspectEnabled == true){
@@ -651,7 +716,7 @@
     }
     function cabinet1Part2(){
       document.getElementById("textbox").innerHTML = "I could probably get something to help my sleep from in there.";
-      setTimeout(cabinet1Part3, 5000);
+      setTimeout(cabinet1Part3, 3000);
     }
     function cabinet1Part3(){
       document.getElementById("textbox").innerHTML = "But it's locked.";
@@ -717,8 +782,11 @@
 
 		//CHRISTMAS TREE
 		function christmasTree1(){
-			document.getElementById("textbox").innerHTML = "Not yet.";
-      setTimeout(christmasTree2, 3000);
+			if(inspectEnabled == true){
+				inspectEnabled = false;
+				document.getElementById("textbox").innerHTML = "Not yet.";
+      	setTimeout(christmasTree2, 3000);
+			}
 		}
 		function christmasTree2(){
 			document.getElementById("textbox").innerHTML = "Christmas doesn't start until tomorrow.";
@@ -925,6 +993,27 @@
 		function wrenchDescription(){
 			document.getElementById("inventorydescription").innerHTML = "<h1>Wrench</h1><p>Great for loosening pipes.</p>";
 		}
+		function dreamHammerDescription(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Hammer</h1><p>Great for smashing destructible windows.</p>";
+		}
+		function note1Description(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 1</h1><h3>YOU</h3>";
+		}
+		function note2Description(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 2</h1><h3>ARE</h3>";
+		}
+		function note3Description(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 3</h1><h5>D</h5>";
+		}
+		function note4Description(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 4</h1><h5>E</h5>";
+		}
+		function note5Description(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 5</h1><h5>A</h5>";
+		}
+		function note6Description(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 6</h1><h4>R to us. We have been so worried ever since you overdosed on sleeping pills and hit yourself on the head with that pipe 10 years ago. I have been told by the doctors that keeping you alive is pointless and that there is no hope, but I did not listen. If you are reading this message, please try to wake up. We miss you very much. I have faith that one day you will return to us. So please. Wake up. I beg you. <br> <br> Mom                 </h4>";
+		}
 
     function sleep1(){
       document.getElementById("textbox").innerHTML = "";
@@ -949,7 +1038,25 @@
     }
 		function sleep3(){
 			inspectEnabled = false;
-			document.getElementById("textbox").innerHTML = "TO BE CONTINUED..."
+
+			document.getElementById("itemcontainer1").innerHTML = "";
+			document.getElementById("itemcontainer2").innerHTML = "";
+			document.getElementById("itemcontainer3").innerHTML = "";
+			document.getElementById("itemcontainer4").innerHTML = "";
+			document.getElementById("itemcontainer5").innerHTML = "";
+			document.getElementById("itemcontainer6").innerHTML = "";
+			document.getElementById("itemcontainer7").innerHTML = "";
+			document.getElementById("itemcontainer8").innerHTML = "";
+			totalItem = 0;
+
+			upperBrightness = 2;
+			lowerBrightness = 1.9;
+
+			music.play();
+
+			enterDreamLivingRoom();
+
+			inspectEnabled = true;
 		}
 
     function sleepFail1(){
@@ -2137,6 +2244,562 @@
 			}
 		}
 
+		/*
+		 ____    ____   ____   ____   _    _   ____
+		|    \  |    | |      |    | | \  / | |
+		|     \ |___/  |____  |____| |  \/  | |____
+		|     / |   \  |      |    | |      |      |
+		|____/  |    \ |____  |    | |      |  ____|
+
+		*/
+
+		//Inspect Functions
+		//CHRISTMAS TREE
+		function dreamChristmasTree1(){
+			if(dreamKitchenSeen == true && dreamHallSeen == true){
+				enterChristmasTree();
+			}
+			else{
+				if(inspectEnabled == true){
+	        inspectEnabled = false;
+	        document.getElementById("textbox").innerHTML = "The Christmas tree is brown and dead.";
+	        setTimeout(dreamChristmasTree2, 3000);
+	      }
+			}
+		}
+		function dreamChristmasTree2(){
+      document.getElementById("textbox").innerHTML = "The presents are covered in dust.";
+      setTimeout(dreamChristmasTree3, 3000);
+    }
+		function dreamChristmasTree3(){
+      document.getElementById("textbox").innerHTML = "The candy canes have been eaten away by ants.";
+      setTimeout(clearText, 3000);
+    }
+
+		//DOORWAY
+		function dreamDoorway1(){
+			enterDreamLivingRoom();
+		}
+
+		function dreamDoorway2(){
+			enterDreamHall();
+		}
+
+		//DOOR
+		function dreamDoor2(){
+			if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "The door to my room is gone.";
+        setTimeout(dreamDoor2Part2, 3000);
+      }
+		}
+		function dreamDoor2Part2(){
+			document.getElementById("textbox").innerHTML = "It's as if it was never there to begin with.";
+      setTimeout(clearText, 3000);
+		}
+
+		function dreamDoor3(){
+			if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "The guest room door is gone.";
+        setTimeout(dreamDoor3Part2, 3000);
+      }
+		}
+		function dreamDoor3Part2(){
+			document.getElementById("textbox").innerHTML = "It's been replaced by unpainted plaster.";
+			setTimeout(clearText, 3000);
+		}
+
+		function dreamDoor4(){
+			if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "The bathroom door is gone.";
+        setTimeout(dreamDoor4Part2, 3000);
+      }
+		}
+		function dreamDoor4Part2(){
+			document.getElementById("textbox").innerHTML = "I don't know how long I can hold it for.";
+			setTimeout(clearText, 3000);
+		}
+
+		function dreamDoor5(){
+			if(inspectEnabled == true){
+        inspectEnabled = false;
+        document.getElementById("textbox").innerHTML = "The master bedroom is still here.";
+        setTimeout(dreamDoor5Part2, 3000);
+      }
+		}
+		function dreamDoor5Part2(){
+			document.getElementById("textbox").innerHTML = "There's a force field keeping me half a meter from it.";
+			setTimeout(clearText, 3000);
+		}
+
+		function dreamDoor6(){
+			audioDoor.play();
+			enterDreamKitchen();
+		}
+
+		function dreamDoor7(){
+			if(inspectEnabled == true){
+				inspectEnabled = false;
+				document.getElementById("textbox").innerHTML = "The front door is locked.";
+				setTimeout(dreamDoor7Part2, 3000);
+			}
+		}
+		function dreamDoor7Part2(){
+			document.getElementById("textbox").innerHTML = "The locking mechanism is gone.";
+      setTimeout(clearText, 3000);
+		}
+
+		//HAMMER
+		function dreamHammer1(){
+			dreamHammerTaken = true;
+			totalItem += 1;
+			document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Hammer.png\" class=\"clickable\" style=\"height:100px; width:100px; filter:grayscale(100%)\" onclick=\"useHammer()\" onmouseover=\"dreamHammerDescription()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+			hammerSlot = (totalItem + 1) - 1;
+			audioItem.play();
+			enterDreamLivingRoom();
+		}
+
+		//STOVE
+		function dreamStove1(){
+			if(inspectEnabled == true){
+				inspectEnabled = false;
+				document.getElementById("textbox").innerHTML = "The stove.";
+      	setTimeout(dreamStove2, 3000);
+			}
+		}
+		function dreamStove2(){
+			document.getElementById("textbox").innerHTML = "It's frozen solid.";
+      setTimeout(clearText, 3000);
+		}
+
+		//TABLE
+		function dreamTable1(){
+			if(inspectEnabled == true){
+				inspectEnabled = false;
+				document.getElementById("textbox").innerHTML = "The dinner table.";
+				setTimeout(dreamTable2, 3000);
+			}
+		}
+		function dreamTable2(){
+			document.getElementById("textbox").innerHTML = "My body passes through it as if nothing's there.";
+      setTimeout(clearText, 3000);
+		}
+
+		//TOOLBOX
+		function dreamToolbox1(){
+			if(inspectEnabled == true){
+				inspectEnabled = false;
+				document.getElementById("textbox").innerHTML = "The toolbox.";
+				setTimeout(dreamToolbox2, 3000);
+			}
+		}
+		function dreamToolbox2(){
+			document.getElementById("textbox").innerHTML = "The padlock is gone.";
+      setTimeout(dreamToolbox3, 3000);
+		}
+		function dreamToolbox3(){
+			document.getElementById("textbox").innerHTML = "There's no lid either. It's an airtight box.";
+      setTimeout(clearText, 3000);
+		}
+
+		//WINDOW
+		function dreamWindow1(){
+			if(hammerHeld == true){
+        document.getElementById("textbox").innerHTML = "It's no use.";
+        setTimeout(dreamWindow1Part2, 3000);
+      }
+      else{
+        if(inspectEnabled == true){
+          inspectEnabled = false;
+          document.getElementById("textbox").innerHTML = "The window is sealed shut.";
+          setTimeout(dreamWindow2, 3000);
+        }
+      }
+		}
+		function dreamWindow1Part2(){
+			document.getElementById("textbox").innerHTML = "The window is indestructible.";
+      setTimeout(clearText, 3000);
+		}
+		function dreamWindow2(){
+			document.getElementById("textbox").innerHTML = "I'll need to smash it if I want to get through.";
+      setTimeout(clearText, 3000);
+		}
+
+		//PRESENTS
+		function present1(){
+			presentsScreen += 1;
+			audioPresent.play();
+			enterChristmasTree();
+		}
+		function present2(){
+			presentsScreen += 1;
+			audioPresent.play();
+			enterChristmasTree();
+		}
+		function present3(){
+			presentsScreen += 1;
+			audioPresent.play();
+			enterChristmasTree();
+		}
+		function present4(){
+			presentsScreen += 1;
+			audioPresent.play();
+			enterChristmasTree();
+		}
+		function present5(){
+			presentsScreen += 1;
+			audioPresent.play();
+			enterChristmasTree();
+		}
+		function present6(){
+			presentsScreen += 1;
+			audioPresent.play();
+			enterChristmasTree();
+		}
+		function present7(){
+			if(inspectEnabled == true){
+				inspectEnabled = false;
+				document.getElementById("textbox").innerHTML = "The last present is empty.";
+				setTimeout(present7Part2, 3000);
+			}
+		}
+		function present7Part2(){
+			document.getElementById("textbox").innerHTML = "How will the message end?";
+			setTimeout(clearText, 3000);
+		}
+
+		//NOTES
+		function note1(){
+			presentsScreen += 1;
+			totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Note 1.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"note1Description()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+			enterChristmasTree();
+		}
+		function note2(){
+			presentsScreen += 1;
+			totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Note 2.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"note2Description()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+			enterChristmasTree();
+		}
+		function note3(){
+			presentsScreen += 1;
+			totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Note 3.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"note3Description()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+			enterChristmasTree();
+		}
+		function note4(){
+			presentsScreen += 1;
+			totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Note 4.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"note4Description()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+			enterChristmasTree();
+		}
+		function note5(){
+			presentsScreen += 1;
+			totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Note 5.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"note5Description()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+			enterChristmasTree();
+		}
+		function note6(){
+			presentsScreen += 1;
+			totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Cabinet Note.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"note6Description()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+			enterChristmasTree();
+		}
+		function note7(){
+
+		}
+
+		//Movement Functions
+		//LIVING ROOM
+		function enterDreamLivingRoom(){
+			document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom.png";
+			document.getElementById("background").style.filter = "grayscale(100%)";
+
+			document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Dream Christmas Tree.png";
+			document.getElementById("object1").style = "height:230px; width:130px; position:relative; top:-385px; left:195px";
+			document.getElementById("object1").onclick = dreamChristmasTree1;
+			if(dreamKitchenSeen == true && dreamHallSeen == true){
+				document.getElementById("object1").style.filter = "grayscale(0%)";
+			}
+			else{
+				document.getElementById("object1").style.filter = "grayscale(100%)";
+			}
+
+			document.getElementById("object2").src = "Graphics/Objects/LivingRoom/Hallway.png";
+			document.getElementById("object2").style = "height:240px; width:50px; position:relative; top:-240px; left:-130px";
+			document.getElementById("object2").onclick = dreamDoorway2;
+			document.getElementById("object2").style.filter = "grayscale(100%)";
+
+			document.getElementById("object3").src = "Graphics/Objects/LivingRoom/Kitchen Door.png";
+			document.getElementById("object3").style = "height:230px; width:50px; position:relative; top:-240px; left:270px";
+			document.getElementById("object3").onclick = dreamDoor6;
+			document.getElementById("object3").style.filter = "grayscale(100%)";
+
+			document.getElementById("object4").src = "";
+			document.getElementById("object4").style = "";
+			document.getElementById("object4").onclick = "";
+			document.getElementById("object4").style.filter = "grayscale(100%)";
+
+			document.getElementById("object5").src = "";
+			document.getElementById("object5").style = "";
+			document.getElementById("object5").onclick = "";
+			document.getElementById("object5").style.filter = "grayscale(100%)";
+
+			document.getElementById("moveright").style = "";
+			document.getElementById("moveright").onclick = "";
+
+			document.getElementById("moveleft").style = "";
+			document.getElementById("moveleft").onclick = "";
+
+			document.getElementById("moveup").style = "";
+			document.getElementById("moveup").onclick = "";
+
+			document.getElementById("movedown").style = "";
+			document.getElementById("movedown").onclick = "";
+
+			if(dreamHammerTaken == false){
+				document.getElementById("object4").src = "Graphics/Objects/LivingRoom/Hammer.png";
+				document.getElementById("object4").style = "height:55px; width:45px; position:relative; top:-250px; left:-120px";
+				document.getElementById("object4").onclick = dreamHammer1;
+				document.getElementById("object4").style.filter = "grayscale(100%)";
+			}
+		}
+
+		//CHRISTMAS TREE
+		function enterChristmasTree(){
+			document.getElementById("background").style.filter = "grayscale(0%)";
+
+			document.getElementById("object1").src = "";
+			document.getElementById("object1").style = "";
+			document.getElementById("object1").onclick = "";
+			document.getElementById("object1").style.filter = "grayscale(0%)";
+
+			document.getElementById("object2").src = "";
+			document.getElementById("object2").style = "";
+			document.getElementById("object2").onclick = "";
+			document.getElementById("object2").style.filter = "grayscale(0%)";
+
+			document.getElementById("object3").src = "";
+			document.getElementById("object3").style = "";
+			document.getElementById("object3").onclick = "";
+			document.getElementById("object3").style.filter = "grayscale(0%)";
+
+			document.getElementById("object4").src = "";
+			document.getElementById("object4").style = "";
+			document.getElementById("object4").onclick = "";
+			document.getElementById("object4").style.filter = "grayscale(0%)";
+
+			document.getElementById("object5").src = "";
+			document.getElementById("object5").style = "";
+			document.getElementById("object5").onclick = "";
+			document.getElementById("object5").style.filter = "grayscale(0%)";
+
+			document.getElementById("moveright").style = "cursor:e-resize";
+			document.getElementById("moveright").onclick = enterDreamLivingRoom;
+
+			document.getElementById("moveleft").style = "cursor:w-resize";
+			document.getElementById("moveleft").onclick = enterDreamLivingRoom;
+
+			document.getElementById("moveup").style = "";
+			document.getElementById("moveup").onclick = "";
+
+			document.getElementById("movedown").style = "cursor:s-resize";
+			document.getElementById("movedown").onclick = enterDreamLivingRoom;
+
+			if(presentsScreen == 1){
+				document.getElementById("background").src = "Graphics/Backgrounds/Presents 1.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 1.png";
+				document.getElementById("object1").style = "height:310px; width:335px; position:relative; top:-405px; left:60px";
+				document.getElementById("object1").onclick = present1;
+			}
+			if(presentsScreen == 2){
+				document.getElementById("background").src = "Graphics/Backgrounds/PresentsItem 2.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Note 1.png";
+				document.getElementById("object1").style = "height:165px; width:40px; position:relative; top:-335px; left:90px";
+				document.getElementById("object1").onclick = note1;
+			}
+			if(presentsScreen == 3){
+				document.getElementById("background").src = "Graphics/Backgrounds/Presents 2.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 2.png";
+				document.getElementById("object1").style = "height:260px; width:225px; position:relative; top:-380px; left:120px";
+				document.getElementById("object1").onclick = present2;
+			}
+			if(presentsScreen == 4){
+				document.getElementById("background").src = "Graphics/Backgrounds/PresentsItem 3.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Note 2.png";
+				document.getElementById("object1").style = "height:145px; width:35px; position:relative; top:-320px; left:300px";
+				document.getElementById("object1").onclick = note2;
+			}
+			if(presentsScreen == 5){
+				document.getElementById("background").src = "Graphics/Backgrounds/Presents 3.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 3.png";
+				document.getElementById("object1").style = "height:195px; width:175px; position:relative; top:-350px; left:135px";
+				document.getElementById("object1").onclick = present3;
+			}
+			if(presentsScreen == 6){
+				document.getElementById("background").src = "Graphics/Backgrounds/PresentsItem 4.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Note 3.png";
+				document.getElementById("object1").style = "height:115px; width:30px; position:relative; top:-315px; left:260px";
+				document.getElementById("object1").onclick = note3;
+			}
+			if(presentsScreen == 7){
+				document.getElementById("background").src = "Graphics/Backgrounds/Presents 4.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 4.png";
+				document.getElementById("object1").style = "height:150px; width:130px; position:relative; top:-340px; left:155px";
+				document.getElementById("object1").onclick = present4;
+			}
+			if(presentsScreen == 8){
+				document.getElementById("background").src = "Graphics/Backgrounds/PresentsItem 5.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Note 4.png";
+				document.getElementById("object1").style = "height:25px; width:60px; position:relative; top:-245px; left:190px";
+				document.getElementById("object1").onclick = note4;
+			}
+			if(presentsScreen == 9){
+				document.getElementById("background").src = "Graphics/Backgrounds/Presents 5.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 5.png";
+				document.getElementById("object1").style = "height:80px; width:85px; position:relative; top:-315px; left:180px";
+				document.getElementById("object1").onclick = present5;
+			}
+			if(presentsScreen == 10){
+				document.getElementById("background").src = "Graphics/Backgrounds/PresentsItem 6.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Note 5.png";
+				document.getElementById("object1").style = "height:45px; width:15px; position:relative; top:-300px; left:235px";
+				document.getElementById("object1").onclick = note5;
+			}
+			if(presentsScreen == 11){
+				document.getElementById("background").src = "Graphics/Backgrounds/Presents 6.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 6.png";
+				document.getElementById("object1").style = "height:45px; width:40px; position:relative; top:-300px; left:200px";
+				document.getElementById("object1").onclick = present6;
+			}
+			if(presentsScreen == 12){
+				document.getElementById("background").src = "Graphics/Backgrounds/PresentsItem 7.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 7.png";
+				document.getElementById("object1").style = "height:40px; width:30px; position:relative; top:-295px; left:205px";
+				document.getElementById("object1").onclick = present7;
+
+				document.getElementById("object2").src = "Graphics/Objects/ChristmasTree/Note 6.png";
+				document.getElementById("object2").style = "height:30px; width:15px; position:relative; top:-315px; left:410px";
+				document.getElementById("object2").onclick = note6;
+			}
+			if(presentsScreen == 13){
+				document.getElementById("background").src = "Graphics/Backgrounds/Presents 7.png";
+
+				document.getElementById("object1").src = "Graphics/Objects/ChristmasTree/Present 7.png";
+				document.getElementById("object1").style = "height:40px; width:30px; position:relative; top:-295px; left:205px";
+				document.getElementById("object1").onclick = present7;
+			}
+		}
+
+		//KITCHEN
+		function enterDreamKitchen(){
+			dreamKitchenSeen = true;
+
+			document.getElementById("background").src = "Graphics/Backgrounds/Kitchen.png";
+			document.getElementById("background").style.filter = "grayscale(100%)";
+
+			document.getElementById("object1").src = "Graphics/Objects/Kitchen/Stove.png";
+			document.getElementById("object1").style = "height:245px; width:100px; position:relative; top:-425px; left:270px";
+			document.getElementById("object1").onclick = dreamStove1;
+			document.getElementById("object1").style.filter = "grayscale(100%)";
+
+			document.getElementById("object2").src = "Graphics/Objects/Kitchen/Door.png";
+			document.getElementById("object2").style = "height:215px; width:55px; position:relative; top:-310px; left:345px";
+			document.getElementById("object2").onclick = dreamDoor7;
+			document.getElementById("object2").style.filter = "grayscale(100%)";
+
+			document.getElementById("object3").src = "Graphics/Objects/Kitchen/Table.png";
+			document.getElementById("object3").style = "height:225px; width:450px; position:relative; top:-470px; left:5px";
+			document.getElementById("object3").onclick = dreamTable1;
+			document.getElementById("object3").style.filter = "grayscale(100%)";
+
+			document.getElementById("object4").src = "Graphics/Objects/Kitchen/Toolbox.png";
+			document.getElementById("object4").style = "height:75px; width:90px; position:relative; top:-785px; left:160px";
+			document.getElementById("object4").onclick = dreamToolbox1;
+			document.getElementById("object4").style.filter = "grayscale(100%)";
+
+			document.getElementById("object5").src = "Graphics/Objects/Kitchen/Window.png";
+			document.getElementById("object5").style = "height:135px; width:85px; position:relative; top:-790px; left:-90px";
+			document.getElementById("object5").onclick = dreamWindow1;
+			document.getElementById("object5").style.filter = "grayscale(100%)";
+
+			document.getElementById("moveright").style = "";
+			document.getElementById("moveright").onclick = "";
+
+			document.getElementById("moveleft").style = "";
+			document.getElementById("moveleft").onclick = "";
+
+			document.getElementById("moveup").style = "";
+			document.getElementById("moveup").onclick = "";
+
+			document.getElementById("movedown").style = "cursor:s-resize";
+			document.getElementById("movedown").onclick = function() {audioDoor.play(); enterDreamLivingRoom();};
+		}
+
+		//HALLWAY
+		function enterDreamHall(){
+			dreamHallSeen = true;
+			document.getElementById("background").src = "Graphics/Backgrounds/Hall.png";
+			document.getElementById("background").style.filter = "grayscale(100%)";
+
+      document.getElementById("object1").src = "Graphics/Objects/Hall/Bedroom Door.png";
+      document.getElementById("object1").style = "height:290px; width:95px; position:relative; top:-290px; left:400px";
+      document.getElementById("object1").onclick = dreamDoor2;
+			document.getElementById("object1").style.filter = "opacity(0%)";
+
+      document.getElementById("object2").src = "Graphics/Objects/Hall/Guestroom Door.png";
+      document.getElementById("object2").style = "height:245px; width:55px; position:relative; top:-355px; left:230px";
+      document.getElementById("object2").onclick = dreamDoor3;
+			document.getElementById("object2").style.filter = "opacity(0%)";
+
+      document.getElementById("object3").src = "Graphics/Objects/Hall/Bathroom Door.png";
+      document.getElementById("object3").style = "height:205px; width:45px; position:relative; top:-385px; left:-45px";
+      document.getElementById("object3").onclick = dreamDoor4;
+			document.getElementById("object3").style.filter = "opacity(0%)";
+
+      document.getElementById("object4").src = "Graphics/Objects/Hall/Master Bedroom Door.png";
+      document.getElementById("object4").style = "height:275px; width:70px; position:relative; top:-295px; left:-180px";
+      document.getElementById("object4").onclick = dreamDoor5;
+			document.getElementById("object4").style.filter = "grayscale(100%)";
+
+      document.getElementById("object5").src = "Graphics/Objects/Hall/Hallway.png";
+      document.getElementById("object5").style = "height:170px; width:105px; position:relative; top:-490px; left:-70px; image-rendering: auto";
+      document.getElementById("object5").onclick = dreamDoorway1;
+			document.getElementById("object5").style.filter = "grayscale(100%)";
+
+      document.getElementById("moveright").style = "";
+      document.getElementById("moveright").onclick = "";
+
+      document.getElementById("moveleft").style = "";
+      document.getElementById("moveleft").onclick = "";
+
+      document.getElementById("moveup").style = "";
+      document.getElementById("moveup").onclick = "";
+
+      document.getElementById("movedown").style = "";
+      document.getElementById("movedown").onclick = "";
+		}
+
     /*
     <img id="object1" src="Graphics/Objects/Bedroom/Calendar.png" class="clickable" style="height:120px; width:120px; position:relative; top:-420px; left:270px" onclick="calendar1()">
     <img id="object2" src="Graphics/Objects/Bedroom/Lamp.png" class="clickable" style="height:80px; width:65px; position:relative; top:-230px; left:-90px" onclick="lamp1()">
@@ -2147,7 +2810,7 @@
     //BRIGHTNESS FUNCTIONS
 
     function loopBrighter(){
-      if(brightnessSetting >= 0.5){
+      if(brightnessSetting >= upperBrightness){
         setTimeout(loopDarker, brightnessSpeed);
       }
       else{
@@ -2158,7 +2821,7 @@
       }
     }
     function loopDarker(){
-      if(brightnessSetting <= 0.4){
+      if(brightnessSetting <= lowerBrightness){
         setTimeout(loopBrighter, brightnessSpeed);
       }
       else{
