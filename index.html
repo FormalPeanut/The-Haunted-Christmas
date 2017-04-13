@@ -18,6 +18,16 @@
 	<link rel="preload" href="Graphics/Backgrounds/Hall.png">
 	<link rel="preload" href="Graphics/Backgrounds/Kitchen.png">
 	<link rel="preload" href="Graphics/Backgrounds/LivingRoom.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 2.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 3.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 4.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 5.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 6.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 7.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 8.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 9.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 10.png">
+	<link rel="preload" href="Graphics/Backgrounds/LivingRoom 11.png">
 	<link rel="preload" href="Graphics/Backgrounds/Presents 1.png">
 	<link rel="preload" href="Graphics/Backgrounds/Presents 2.png">
 	<link rel="preload" href="Graphics/Backgrounds/Presents 3.png">
@@ -25,7 +35,6 @@
 	<link rel="preload" href="Graphics/Backgrounds/Presents 5.png">
 	<link rel="preload" href="Graphics/Backgrounds/Presents 6.png">
 	<link rel="preload" href="Graphics/Backgrounds/Presents 7.png">
-	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 1.png">
 	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 2.png">
 	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 3.png">
 	<link rel="preload" href="Graphics/Backgrounds/PresentsItem 4.png">
@@ -77,6 +86,11 @@
 	<link rel="preload" href="Graphics/Objects/LivingRoom/Hammer.png">
 	<link rel="preload" href="Graphics/Objects/LivingRoom/Kitchen Door.png">
 	<link rel="preload" href="Graphics/Objects/LivingRoom/Dream Christmas Tree.png">
+	<link rel="preload" href="Graphics/Objects/LivingRoom/Dream Window.png">
+	<link rel="preload" href="Graphics/Objects/LivingRoom/Cracked Window 1.png">
+	<link rel="preload" href="Graphics/Objects/LivingRoom/Cracked Window 2.png">
+	<link rel="preload" href="Graphics/Objects/LivingRoom/Cracked Window 3.png">
+	<link rel="preload" href="Graphics/Objects/LivingRoom/Cracked Window 4.png">
 
 	<link rel="preload" href="Graphics/Objects/Kitchen/Door.png">
 	<link rel="preload" href="Graphics/Objects/Kitchen/Stove.png">
@@ -163,9 +177,13 @@
       height: 500px;
       width: 500px;
       background-color: lightgrey;
-      margin: auto;
+      margin-left: auto;
+			margin-top: auto;
+			margin-right: auto;
+			margin-bottom: auto;
       font-size: 0px;
       filter: brightness(0.5);
+			position: relative;
     }
     .textbox{
       height: 100px;
@@ -282,6 +300,7 @@
 	<div id="overlay" class="overlay" style="background-color:black; position:fixed; z-index:1000; top:0px; left:0px; width:100%; height:100%">
 		<br>Loading...
 	</div>
+
   <div class="container" id="container">
     <img id="background" src="Graphics/Backgrounds/Bedroom.png" style="height:500px; width:500px" draggable="false">
     <div id="moveright" class="moveright" onclick="enterBedDoor()" style="cursor:e-resize">
@@ -347,10 +366,6 @@
   <div class="inventorydescription" id="inventorydescription">
   </div>
 
-  <audio autoplay loop>
-    <source src="Sounds/Ambience.wav" type="audio/wav">
-  </audio>
-
   <div id="itemcontainer9">
 		<img>
   </div>
@@ -358,6 +373,8 @@
   <script>
     //TEXT CONTROLS
     var inspectEnabled = false;
+		var windowEnabled = false;
+		var finalSequence1Started = false;
 
     //BRIGHTNESS CONTROLS
     var containerCSS = document.querySelector(".container");
@@ -389,7 +406,7 @@
     var hammerHeld = false;
 		var wrenchHeld = false;
 
-		//BACKGROUND CONTROLS
+		//LOCATIONS CONTROLS
 		var combinationNumber1 = 0;
 		var combinationNumber2 = 0;
 		var combinationNumber3 = 0;
@@ -423,6 +440,20 @@
     var sleep = 0;
 
 		var presentsScreen = 1;
+		var christmasTreeFaded = false;
+		var windowColoured = false;
+
+		var christmasTreeOpacity = 1;
+		var controlEntry1 = false;
+		var windowGrayscale = 1;
+		var windowState = 1;
+		var roomState = 1;
+
+		var rumblingVolume = 1;
+
+		var goodEnding = false;
+
+		var overlayOpacity = 0;
 
     //AUDIO CONTROLS
     var audioDoor = new Audio("Sounds/Door.wav");
@@ -430,15 +461,24 @@
     var audioSmash = new Audio("Sounds/Smash.wav");
 		var audioSmashHead = new Audio("Sounds/Head Smash.wav");
 		var audioPresent = new Audio("Sounds/Presents.wav");
+		var audioGlass = new Audio("Sounds/Glass.wav");
 
+		var audioEnd = new Audio("Sounds/Bad End.wav");
+
+		var ambience = new Audio("Sounds/Ambience.wav");
 		var music = new Audio("Sounds/We Wish You A Merry Christmas.wav");
-
+		var rumbling = new Audio("Sounds/Rumbling.wav");
+		ambience.loop = true;
 		music.loop = true;
 		music.volume = 0.25;
+		rumbling.loop = true;
+
+		ambience.play();
 
 		//OVERLAY FUNCTION
 		function removeOverlay(){
-			document.getElementById("overlay").remove();
+			document.getElementById("overlay").style.opacity = 0;
+			document.getElementById("overlay").style.zIndex = -1000000000;
 			setTimeout(introBedroom, 1000);
 		}
 
@@ -772,7 +812,7 @@
     }
 		function pipe1Part2(){
 			document.getElementById("textbox").innerHTML = "This should do nicely.";
-			setTimeout(function(){audioSmashHead.play();}, 13000);
+			setTimeout(function(){audioSmashHead.play();}, 8000);
 			setTimeout(sleep1, 3000);
 		}
 		function pipe2(){
@@ -1012,14 +1052,17 @@
 			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 5</h1><h5>A</h5>";
 		}
 		function note6Description(){
-			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 6</h1><h4>R to us. We have been so worried ever since you overdosed on sleeping pills and hit yourself on the head with that pipe 10 years ago. I have been told by the doctors that keeping you alive is pointless and that there is no hope, but I did not listen. If you are reading this message, please try to wake up. We miss you very much. I have faith that one day you will return to us. So please. Wake up. I beg you. <br> <br> Mom                 </h4>";
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 6</h1><h4>R to us. We have been so worried ever since you overdosed on sleeping pills and hit yourself on the head with that pipe 10 years ago. I have been told by the doctors that keeping you alive is pointless and that there is no hope, but I did not listen. If you are reading this message, please try to wake up. We miss you very much. I have faith that one day you will return to us. So please. Wake up. I beg you. <br> <br> Mom.                 </h4>";
+		}
+		function note7Description(){
+			document.getElementById("inventorydescription").innerHTML = "<h1>Mysterious Note 6</h1><h4>I'm sorry, but I have no choice. I'm cutting your life support. I know I might be murdering you, but the financial and emotional costs are too much for me. Me and dad both lost our jobs, and the burden of being unsure if you might come back or not is preventing us from focusing on finding new work. I'm so sorry. Please, if you are still awake somewhere in there, don't be mad at me. <br> <br> Mom.                 </h4>";
 		}
 
     function sleep1(){
       document.getElementById("textbox").innerHTML = "";
       sleep += 1;
-      brightnessSpeed = 100;
-      setTimeout(sleep2, 10000)
+      brightnessSpeed = 50;
+      setTimeout(sleep2, 5000)
     }
     function sleep2(){
       if(brightnessSetting <= 0){
@@ -2520,28 +2563,115 @@
 		//Movement Functions
 		//LIVING ROOM
 		function enterDreamLivingRoom(){
-			document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom.png";
-			document.getElementById("background").style.filter = "grayscale(100%)";
-
-			document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Dream Christmas Tree.png";
-			document.getElementById("object1").style = "height:230px; width:130px; position:relative; top:-385px; left:195px";
-			document.getElementById("object1").onclick = dreamChristmasTree1;
-			if(dreamKitchenSeen == true && dreamHallSeen == true){
-				document.getElementById("object1").style.filter = "grayscale(0%)";
+			if(roomState == 1){
+				document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom.png";
+				document.getElementById("background").style.filter = "grayscale(100%)";
 			}
-			else{
+			if(roomState == 2){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 2.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 3){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 3.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 4){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 4.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 5){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 5.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 6){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 6.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 7){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 7.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 8){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 8.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 9){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 9.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 10){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 10.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+			if(roomState == 11){
+					document.getElementById("background").src = "Graphics/Backgrounds/LivingRoom 11.png";
+					document.getElementById("background").style.filter = "grayscale(100%)";
+			}
+
+			if(christmasTreeFaded != true){
+				document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Dream Christmas Tree.png";
+				document.getElementById("object1").style = "height:230px; width:130px; position:relative; top:-385px; left:195px";
+				document.getElementById("object1").onclick = dreamChristmasTree1;
+				if(dreamKitchenSeen == true && dreamHallSeen == true){
+					document.getElementById("object1").style.filter = "grayscale(0%)";
+				}
+				else{
+					document.getElementById("object1").style.filter = "grayscale(100%)";
+				}
+			}
+			if(christmasTreeFaded == true && windowColoured != true){
+				document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Dream Window.png";
+				document.getElementById("object1").style = "height:110px; width:155px; position:relative; top:-325px; left:185px";
+				document.getElementById("object1").onclick = "";
 				document.getElementById("object1").style.filter = "grayscale(100%)";
 			}
+			if(windowColoured == true){
+				if(windowState == 1){
+					document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Dream Window.png";
+				}
+				if(windowState == 2){
+					document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Cracked Window 1.png";
+				}
+				if(windowState == 3){
+					document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Cracked Window 2.png";
+				}
+				if(windowState == 4){
+					document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Cracked Window 3.png";
+				}
+				if(windowState == 5){
+					document.getElementById("object1").src = "Graphics/Objects/LivingRoom/Cracked Window 4.png";
+				}
+				document.getElementById("object1").style = "height:110px; width:155px; position:relative; top:-325px; left:185px";
+				document.getElementById("object1").onclick = finalWindow1;
+				document.getElementById("object1").style.filter = "grayscale(0%)";
 
-			document.getElementById("object2").src = "Graphics/Objects/LivingRoom/Hallway.png";
-			document.getElementById("object2").style = "height:240px; width:50px; position:relative; top:-240px; left:-130px";
-			document.getElementById("object2").onclick = dreamDoorway2;
-			document.getElementById("object2").style.filter = "grayscale(100%)";
+				if(finalSequence1Started == false){
+					setTimeout(finalSequence1, 2000);
+				}
+			}
 
-			document.getElementById("object3").src = "Graphics/Objects/LivingRoom/Kitchen Door.png";
-			document.getElementById("object3").style = "height:230px; width:50px; position:relative; top:-240px; left:270px";
-			document.getElementById("object3").onclick = dreamDoor6;
-			document.getElementById("object3").style.filter = "grayscale(100%)";
+			if(presentsScreen != 13){
+				document.getElementById("object2").src = "Graphics/Objects/LivingRoom/Hallway.png";
+				document.getElementById("object2").style = "height:240px; width:50px; position:relative; top:-240px; left:-130px";
+				document.getElementById("object2").onclick = dreamDoorway2;
+				document.getElementById("object2").style.filter = "grayscale(100%)";
+
+				document.getElementById("object3").src = "Graphics/Objects/LivingRoom/Kitchen Door.png";
+				document.getElementById("object3").style = "height:230px; width:50px; position:relative; top:-240px; left:270px";
+				document.getElementById("object3").onclick = dreamDoor6;
+				document.getElementById("object3").style.filter = "grayscale(100%)";
+			}
+			else{
+				document.getElementById("object2").src = "";
+				document.getElementById("object2").style = "";
+				document.getElementById("object2").onclick = "";
+				document.getElementById("object2").style.filter = "grayscale(100%)";
+
+				document.getElementById("object3").src = "";
+				document.getElementById("object3").style = "";
+				document.getElementById("object3").onclick = "";
+				document.getElementById("object3").style.filter = "grayscale(100%)";
+			}
 
 			document.getElementById("object4").src = "";
 			document.getElementById("object4").style = "";
@@ -2565,11 +2695,24 @@
 			document.getElementById("movedown").style = "";
 			document.getElementById("movedown").onclick = "";
 
-			if(dreamHammerTaken == false){
+			if(dreamHammerTaken == false && presentsScreen != 13){
 				document.getElementById("object4").src = "Graphics/Objects/LivingRoom/Hammer.png";
 				document.getElementById("object4").style = "height:55px; width:45px; position:relative; top:-250px; left:-120px";
 				document.getElementById("object4").onclick = dreamHammer1;
 				document.getElementById("object4").style.filter = "grayscale(100%)";
+			}
+
+			if(christmasTreeFaded == true && windowColoured != true){
+				windowColoured = true;
+				console.log("Window has Coloured!");
+				windowColour();
+			}
+
+			if(presentsScreen == 13 && christmasTreeFaded != true){
+				christmasTreeFaded = true;
+				document.getElementById("object1").onclick = "";
+				console.log("Tree has Faded!");
+				christmasTreeDisappear();
 			}
 		}
 
@@ -2799,6 +2942,368 @@
       document.getElementById("movedown").style = "";
       document.getElementById("movedown").onclick = "";
 		}
+
+		//ENDING FUNCTIONS
+		function christmasTreeDisappear(){
+			if(christmasTreeOpacity >= 0){
+				christmasTreeOpacity -=0.002;
+				console.log(christmasTreeOpacity);
+				document.getElementById("object1").style.opacity = christmasTreeOpacity;
+				setTimeout(christmasTreeDisappear, 1);
+			}
+			else if(controlEntry1 == false){
+				enterDreamLivingRoom();
+				controlEntry1 = true;
+				console.log("why");
+			}
+		}
+
+		function windowColour(){
+			if(windowGrayscale >= 0){
+				console.log("ding");
+				windowGrayscale -=0.001;
+				document.getElementById("object1").style.filter = "grayscale(" + windowGrayscale + ")";
+
+				if(windowGrayscale >= 0){
+					ambience.volume = windowGrayscale;
+					music.volume = windowGrayscale / 4;
+				}
+
+				setTimeout(windowColour, 1);
+			}
+			else{
+				console.log("dong");
+
+				ambience.volume = 0;
+				music.volume = 0;
+
+				enterDreamLivingRoom();
+			}
+		}
+
+		function finalWindow1(){
+			if(windowEnabled == true){
+				if(windowState < 4){
+					windowState += 1;
+					eval("finalWindow" + windowState + "()");
+					enterDreamLivingRoom();
+				}
+				else if(hammerHeld == true && windowState <= 4.5){
+					windowState = 5;
+					audioGlass.play();
+					enterDreamLivingRoom();
+					goodEnding = true;
+				}
+			}
+		}
+		function finalWindow2(){
+			windowEnabled = false;
+
+			audioGlass.play();
+			document.getElementById("textbox").innerHTML = "Wake up...!";
+			setTimeout(clearText, 7000);
+			setTimeout(windowClear, 7000);
+		}
+		function finalWindow3(){
+			windowEnabled = false;
+
+			audioGlass.play();
+			document.getElementById("textbox").innerHTML = "Wake Up!";
+			setTimeout(clearText, 7000);
+			setTimeout(windowClear, 7000);
+		}
+		function finalWindow4(){
+			windowEnabled = false;
+
+			audioGlass.play();
+			document.getElementById("textbox").innerHTML = "WAKE UP!!";
+			setTimeout(clearText, 7000);
+			setTimeout(windowClear, 7000);
+			setTimeout(finalSequence2, 2000);
+		}
+
+		function windowClear(){
+			windowEnabled = true;
+		}
+
+		function finalSequence1(){
+			finalSequence1Started = true;
+
+			document.querySelector(".textbox").style.color = "white";
+
+			document.getElementById("textbox").innerHTML = ".";
+      setTimeout(finalSequence1Part2, 200);
+		}
+		function finalSequence1Part2(){
+			document.getElementById("textbox").innerHTML = "..";
+			setTimeout(finalSequence1Part3, 200);
+		}
+		function finalSequence1Part3(){
+			document.getElementById("textbox").innerHTML = "...";
+			setTimeout(finalSequence1Part4, 200);
+		}
+		function finalSequence1Part4(){
+			document.getElementById("textbox").innerHTML = "... ";
+			setTimeout(finalSequence1Part5, 200);
+		}
+		function finalSequence1Part5(){
+			document.getElementById("textbox").innerHTML = "... W";
+			setTimeout(finalSequence1Part6, 200);
+		}
+		function finalSequence1Part6(){
+			document.getElementById("textbox").innerHTML = "... Wa";
+			setTimeout(finalSequence1Part7, 200);
+		}
+		function finalSequence1Part7(){
+			document.getElementById("textbox").innerHTML = "... Wak";
+			setTimeout(finalSequence1Part8, 200);
+		}
+		function finalSequence1Part8(){
+			document.getElementById("textbox").innerHTML = "... Wake";
+			setTimeout(finalSequence1Part9, 200);
+		}
+		function finalSequence1Part9(){
+			document.getElementById("textbox").innerHTML = "... Wake ";
+			setTimeout(finalSequence1Part10, 200);
+		}
+		function finalSequence1Part10(){
+			document.getElementById("textbox").innerHTML = "... Wake u";
+			setTimeout(finalSequence1Part11, 200);
+		}
+		function finalSequence1Part11(){
+			document.getElementById("textbox").innerHTML = "... Wake up";
+			setTimeout(finalSequence1Part12, 200);
+		}
+		function finalSequence1Part12(){
+			document.getElementById("textbox").innerHTML = "... Wake up.";
+			setTimeout(finalSequence1Part13, 200);
+		}
+		function finalSequence1Part13(){
+			document.getElementById("textbox").innerHTML = "... Wake up..";
+			setTimeout(finalSequence1Part14, 200);
+		}
+		function finalSequence1Part14(){
+			document.getElementById("textbox").innerHTML = "... Wake up...";
+			setTimeout(clearText, 5000);
+			setTimeout(windowClear, 5000);
+		}
+
+		function finalSequence2(){
+			document.getElementById("textbox").innerHTML = "!!!";
+
+			rumbling.play();
+			audioSmash.play();
+			roomState = 2;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part2, 5000);
+		}
+		function finalSequence2Part2(){
+			audioSmash.play();
+			roomState = 3;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part3, 5000);
+		}
+		function finalSequence2Part3(){
+			audioSmash.play();
+			roomState = 4;
+			enterDreamLivingRoom();
+
+			totalItem += 1;
+      document.getElementById("itemcontainer" + totalItem).innerHTML = "<img src=\"Graphics/Items/Cabinet Note.png\" class=\"clickable\" style=\"height:100px; width:100px\" onmouseover=\"note7Description()\" onmouseout=\"clearDescription()\" draggable=\"false\">";
+      audioItem.play();
+
+			setTimeout(finalSequence2Part4, 5000);
+		}
+		function finalSequence2Part4(){
+			audioSmash.play();
+			roomState = 5;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part5, 5000);
+		}
+		function finalSequence2Part5(){
+			audioSmash.play();
+			roomState = 6;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part6, 5000);
+		}
+		function finalSequence2Part6(){
+			audioSmash.play();
+			roomState = 7;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part7, 5000);
+		}
+		function finalSequence2Part7(){
+			audioSmash.play();
+			roomState = 8;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part8, 5000);
+		}
+		function finalSequence2Part8(){
+			audioSmash.play();
+			roomState = 9;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part9, 5000);
+		}
+		function finalSequence2Part9(){
+			audioSmash.play();
+			roomState = 10;
+			enterDreamLivingRoom();
+
+			setTimeout(finalSequence2Part10, 5000);
+		}
+		function finalSequence2Part10(){
+			audioSmash.play();
+			roomState = 11;
+			enterDreamLivingRoom();
+
+			fadeRumbling();
+
+			setTimeout(finalSequence2Part11, 5000);
+		}
+		function finalSequence2Part11(){
+			if(goodEnding == false){
+				audioSmash.play();
+				brightnessSpeed = 10;
+				upperBrightness = 0;
+				lowerBrightness = 0;
+
+				setTimeout(badEnd1, 4000);
+
+				setTimeout(badEnd2, 10000);
+			}
+			if(goodEnding == true){
+				audioGlass.play();
+				brightnessSpeed = 10;
+				upperBrightness = 100;
+				lowerBrightness = 100;
+
+				setTimeout(goodEnd1, 4000);
+
+				setTimeout(goodEnd2, 10000);
+			}
+		}
+
+		function fadeRumbling(){
+			if(rumblingVolume >= 0){
+				rumbling.volume = rumblingVolume;
+
+				rumblingVolume -=0.002;
+
+				setTimeout(fadeRumbling, 1);
+			}
+			else{
+				rumbling.volume = 0;
+			}
+		}
+
+		function badEnd1(){
+			document.getElementById("overlay").style.zIndex = 10000000;
+			document.getElementById("overlay").innerHTML = "";
+			returnOverlay();
+		}
+		function badEnd2(){
+			audioEnd.play();
+		}
+
+		function goodEnd1(){
+			document.getElementById("overlay").style.backgroundColor = "white";
+			document.getElementById("overlay").style.zIndex = 10000000000;
+			document.getElementById("container").style.zIndex = 0;
+			document.getElementById("textbox").style.zIndex = 0;
+			document.getElementById("inventory").style.zIndex = 0;
+			document.getElementById("inventorydescription").style.zIndex = 10000000000;
+			document.getElementById("overlay").innerHTML = "";
+			returnOverlay();
+		}
+		function goodEnd2(){
+			document.getElementById("overlay").innerHTML = "<br> I";
+			setTimeout(goodEnd3, 200);
+		}
+		function goodEnd3(){
+			document.getElementById("overlay").innerHTML = "<br> I ";
+			setTimeout(goodEnd4, 200);
+		}
+		function goodEnd4(){
+			document.getElementById("overlay").innerHTML = "<br> I w";
+			setTimeout(goodEnd5, 200);
+		}
+		function goodEnd5(){
+			document.getElementById("overlay").innerHTML = "<br> I wo";
+			setTimeout(goodEnd6, 200);
+		}
+		function goodEnd6(){
+			document.getElementById("overlay").innerHTML = "<br> I wok";
+			setTimeout(goodEnd7, 200);
+		}
+		function goodEnd7(){
+			document.getElementById("overlay").innerHTML = "<br> I woke";
+			setTimeout(goodEnd8, 200);
+		}
+		function goodEnd8(){
+			document.getElementById("overlay").innerHTML = "<br> I woke ";
+			setTimeout(goodEnd9, 200);
+		}
+		function goodEnd9(){
+			document.getElementById("overlay").innerHTML = "<br> I woke u";
+			setTimeout(goodEnd10, 200);
+		}
+		function goodEnd10(){
+			document.getElementById("overlay").innerHTML = "<br> I woke up";
+			setTimeout(goodEnd11, 200);
+		}
+		function goodEnd11(){
+			document.getElementById("overlay").innerHTML = "<br> I woke up.";
+			setTimeout(goodEnd12, 3000);
+		}
+		function goodEnd12(){
+			document.getElementById("overlay").innerHTML = "";
+		}
+
+		function returnOverlay(){
+			if(overlayOpacity < 1){
+				document.getElementById("overlay").style.opacity = overlayOpacity;
+
+				overlayOpacity += 0.001;
+
+				console.log(document.getElementById("overlay").style.opacity);
+
+				setTimeout(returnOverlay, 1);
+			}
+			else{
+			}
+		}
+
+		/*function shakeScreen(){
+			var topRNG = Math.random();
+			var leftRNG = Math.random();
+			var topAlignmentRNG = Math.random();
+			var leftAlignmentRNG = Math.random();
+
+			if(topAlignmentRNG > 0.5){
+				topRNG = 0 - topRNG;
+			}
+			if(leftAlignmentRNG > 0.5){
+				leftRNG = 0 - leftRNG;
+			}
+
+			var halfheight = screen.height / 2;
+			var halfwidth = screen.width / 2;
+
+			var topMargin = (topRNG * 5);
+			var leftMargin = (halfheight + (leftRNG * 5));
+
+			document.getElementById("topSide").style.margin = topMargin.toString() + "px)";
+			containerCSS.style.marginLeft = leftMargin.toString() + "20px)";
+
+			setTimeout(shakeScreen, 50);
+		}*/
 
     /*
     <img id="object1" src="Graphics/Objects/Bedroom/Calendar.png" class="clickable" style="height:120px; width:120px; position:relative; top:-420px; left:270px" onclick="calendar1()">
